@@ -15,6 +15,8 @@ import javax.swing.border.TitledBorder;
 
 import controller.DrawingController;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -101,6 +103,14 @@ public class DrawingFrame extends JFrame {
 		
 		lblContourColor = new JLabel("Contour color:");
 		pnlShapes.add(lblContourColor, "cell 0 14");
+		
+		//automatski untoggluje ostale buttone kada je jedan toggleovan
+		ButtonGroup group = new ButtonGroup();
+		group.add(btnPoint);
+		group.add(btnLine);
+		group.add(btnSquare);
+		group.add(btnCircle);
+		group.add(btnRectangle);
 		
 		btnContourColor = new JButton("     ");
 		btnContourColor.addActionListener(new ActionListener() {
