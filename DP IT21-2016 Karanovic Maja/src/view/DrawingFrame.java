@@ -25,6 +25,7 @@ public class DrawingFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel pnlShapes;
+	private JPanel pnlColors;
 	private DrawingView view = new DrawingView();
 	private DrawingController controller;
 	
@@ -34,7 +35,8 @@ public class DrawingFrame extends JFrame {
 	private JToggleButton btnSquare;
 	private JToggleButton btnRectangle;
 	private JToggleButton btnCircle;
-
+	
+	private String shapeSelected;
 
 	/**
 	 * Launch the application.
@@ -64,14 +66,7 @@ public class DrawingFrame extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		//mouse event listener
-		view.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				controller.mouseClicked(arg0);
-			}
-		});
-		
+
 		//ubacivanje view-a
 		view.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		view.setBackground(Color.WHITE);
@@ -81,7 +76,7 @@ public class DrawingFrame extends JFrame {
 		pnlShapes = new JPanel();
 		pnlShapes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Shapes:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		contentPane.add(pnlShapes, BorderLayout.WEST);
-		pnlShapes.setLayout(new MigLayout("", "[]", "[][][][][][][][][]"));
+		pnlShapes.setLayout(new MigLayout("", "[grow]", "[][][][][][][][][][][][][][][][][][][grow]"));
 		
 		btnPoint = new JToggleButton("Point");
 		pnlShapes.add(btnPoint, "cell 0 1, grow");
@@ -94,10 +89,22 @@ public class DrawingFrame extends JFrame {
 		
 		btnRectangle = new JToggleButton("Rectangle");
 		pnlShapes.add(btnRectangle, "cell 0 4,, grow");
-
 		
 		btnCircle = new JToggleButton("Circle");
 		pnlShapes.add(btnCircle, "cell 0 5, grow");
+		
+		//mouse event listener
+		view.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(btnPoint.isSelected()) controller.addPoint(arg0);
+				else if(btnLine.isSelected()) controller.addLine(arg0);
+				else if(btnSquare.isSelected()) controller.addSquare(arg0);
+				else if(btnRectangle.isSelected());
+				else if(btnCircle.isSelected());
+			}
+		});
+		
 		
 	}
 	
@@ -109,6 +116,14 @@ public class DrawingFrame extends JFrame {
 	public void setController(DrawingController controller)
 	{
 		this.controller = controller;
+	}
+
+	public String getShapeSelected() {
+		return shapeSelected;
+	}
+
+	public void setShapeSelected(String shapeSelected) {
+		this.shapeSelected = shapeSelected;
 	}
 	
 
