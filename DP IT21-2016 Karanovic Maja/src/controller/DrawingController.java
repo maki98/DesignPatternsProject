@@ -3,6 +3,7 @@ package controller;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
 import geometry.DrawingModel;
@@ -16,6 +17,9 @@ public class DrawingController {
 	private DrawingFrame frame;
 	private Point firstPointOfLine;
 	
+	private Color insideColor = Color.WHITE;
+	private Color contourColor = Color.BLACK;
+	
 	public DrawingController(DrawingModel model, DrawingFrame frame)
 	{
 		this.model = model;
@@ -25,7 +29,7 @@ public class DrawingController {
 	
 	public void addPoint(MouseEvent arg0)
 	{
-		Point p = new Point(arg0.getX(), arg0.getY(), Color.RED);
+		Point p = new Point(arg0.getX(), arg0.getY(), contourColor);
 		model.add(p);
 		frame.getView().repaint();
 	}
@@ -39,15 +43,30 @@ public class DrawingController {
 		else
 		{
 			Point secondPointOfLine = new Point(arg0.getX(), arg0.getY());
-			Line l = new Line(firstPointOfLine, secondPointOfLine, Color.RED);
+			Line l = new Line(firstPointOfLine, secondPointOfLine, contourColor);
 			model.add(l);
 			frame.getView().repaint();
 			firstPointOfLine = null;
 		}
 	}
 	
-	public void addSquare(MouseEvent arg0)
+	public void chooseContourColor()
 	{
-		
+		Color temp = JColorChooser.showDialog(null, "Choose contour color:", contourColor);
+		if(temp != null)
+		{
+			contourColor = temp;
+			frame.getBtnContourColor().setBackground(contourColor);
+		}
+	}
+	
+	public void chooseInsideColor()
+	{
+		Color temp = JColorChooser.showDialog(null, "Choose inside color:", insideColor);
+		if(temp != null)
+		{
+			insideColor = temp;
+			frame.getBtnInsideColor().setBackground(insideColor);
+		}
 	}
 }

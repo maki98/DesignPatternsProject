@@ -12,7 +12,6 @@ public class DrawingApp {
 		frame.getView().setModel(model);
 		DrawingController controller = new DrawingController(model, frame);
 		frame.setController(controller);
-		
 		frame.setVisible(true);
 	}
 }
