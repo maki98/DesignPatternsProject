@@ -113,6 +113,7 @@ public class DrawingFrame extends JFrame {
 		group.add(btnRectangle);
 		
 		btnContourColor = new JButton("     ");
+		btnContourColor.setBackground(Color.BLACK);
 		btnContourColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				controller.chooseContourColor();
@@ -124,6 +125,7 @@ public class DrawingFrame extends JFrame {
 		pnlShapes.add(lblInsideColor, "cell 0 16");
 		
 		btnInsideColor = new JButton("     ");
+		btnInsideColor.setBackground(Color.WHITE);
 		btnInsideColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.chooseInsideColor();
@@ -144,7 +146,10 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.addLine(arg0);
 				}
-				else if(btnSquare.isSelected());
+				else if(btnSquare.isSelected())
+				{
+					controller.addSquare(arg0);
+				}
 				else if(btnRectangle.isSelected());
 				else if(btnCircle.isSelected());
 			}
