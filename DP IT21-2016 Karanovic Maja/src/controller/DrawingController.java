@@ -2,16 +2,22 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
 
+import adapter.HexagonAdapter;
+import dialogs.DlgForCircle;
+import dialogs.DlgForHexagon;
+import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
+import geometry.Circle;
 import geometry.DrawingModel;
 import geometry.Line;
 import geometry.Point;
+import geometry.Rectangle;
+import geometry.Shape;
 import geometry.Square;
+import hexagon.Hexagon;
 import view.DrawingFrame;
 
 public class DrawingController {
@@ -59,10 +65,46 @@ public class DrawingController {
 		if(dialog.getFinished() == 1)
 		{
 			Square s = new Square(new Point(dialog.getX(), dialog.getY()), dialog.getLength(), dialog.getContour(), dialog.getInside());
-			System.out.println(s.toString());
 			model.add(s);
 			frame.getView().repaint();
 		}
+	}
+
+	public void addRectangle(MouseEvent arg0) {
+		DlgForRectangle dialog = new DlgForRectangle();
+		dialog.informationGot(arg0.getX(), arg0.getY(), contourColor, insideColor);
+		dialog.setVisible(true);
+		if(dialog.getFinished() == 1)
+		{
+			Rectangle r = new Rectangle(new Point(dialog.getX(), dialog.getY()), dialog.getLength(), dialog.getMyHeight(), dialog.getContour(), dialog.getInside());
+			model.add(r);
+			frame.getView().repaint();
+		}	
+	}
+	
+	public void addCircle(MouseEvent arg0) {
+		DlgForCircle dialog = new DlgForCircle();
+		dialog.informationGot(arg0.getX(), arg0.getY(), contourColor, insideColor);
+		dialog.setVisible(true);
+		if(dialog.getFinished() == 1)
+		{
+			Circle c = new Circle(new Point(dialog.getX(), dialog.getY()), dialog.getRadius(), dialog.getContour(), dialog.getInside());
+			model.add(c);
+			frame.getView().repaint();
+		}
+	}
+	
+	public void addHexagon(MouseEvent arg0) {
+		DlgForHexagon dialog = new DlgForHexagon();
+		dialog.informationGot(arg0.getX(), arg0.getY(), contourColor, insideColor);
+		dialog.setVisible(true);
+		if(dialog.getFinished() == 1)
+		{
+			Hexagon h = new Hexagon(dialog.getX(), dialog.getY(), dialog.getRadius());
+			model.add(h);
+			frame.getView().repaint();
+		}
+		
 	}
 	
 	public void chooseContourColor()
@@ -84,6 +126,8 @@ public class DrawingController {
 			frame.getBtnInsideColor().setBackground(insideColor);
 		}
 	}
+
+
 
 
 }

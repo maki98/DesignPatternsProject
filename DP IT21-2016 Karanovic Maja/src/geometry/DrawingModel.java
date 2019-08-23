@@ -2,6 +2,8 @@ package geometry;
 
 import java.util.ArrayList;
 
+import hexagon.Hexagon;
+
 public class DrawingModel {
 	private ArrayList<Shape> shapes = new ArrayList<Shape>();
 	
@@ -24,4 +26,5 @@ public class DrawingModel {
 	{
 		shapes.remove(s);
 	}
+
 }

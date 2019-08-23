@@ -7,10 +7,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
 import controller.DrawingController;
@@ -26,9 +24,9 @@ import javax.swing.JLabel;
 
 public class DrawingFrame extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel pnlShapes;
-	private JPanel pnlColors;
 	private DrawingView view = new DrawingView();
 	private DrawingController controller;
 	
@@ -38,6 +36,8 @@ public class DrawingFrame extends JFrame {
 	private JToggleButton btnSquare;
 	private JToggleButton btnRectangle;
 	private JToggleButton btnCircle;
+	private JToggleButton btnHexagon;
+
 	
 	private String shapeSelected;
 	private JLabel lblContourColor;
@@ -101,6 +101,9 @@ public class DrawingFrame extends JFrame {
 		btnCircle = new JToggleButton("Circle");
 		pnlShapes.add(btnCircle, "cell 0 5, grow");
 		
+		btnHexagon = new JToggleButton("Hexagon");
+		pnlShapes.add(btnHexagon, "cell 0 6, grow");
+		
 		lblContourColor = new JLabel("Contour color:");
 		pnlShapes.add(lblContourColor, "cell 0 14");
 		
@@ -111,7 +114,8 @@ public class DrawingFrame extends JFrame {
 		group.add(btnSquare);
 		group.add(btnCircle);
 		group.add(btnRectangle);
-		
+		group.add(btnHexagon);
+
 		btnContourColor = new JButton("     ");
 		btnContourColor.setBackground(Color.BLACK);
 		btnContourColor.addActionListener(new ActionListener() {
@@ -140,7 +144,6 @@ public class DrawingFrame extends JFrame {
 				if(btnPoint.isSelected()) 
 				{
 					controller.addPoint(arg0);
-					
 				}
 				else if(btnLine.isSelected()) 
 				{
@@ -150,8 +153,18 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.addSquare(arg0);
 				}
-				else if(btnRectangle.isSelected());
-				else if(btnCircle.isSelected());
+				else if(btnRectangle.isSelected()) 
+				{
+					controller.addRectangle(arg0);
+				}
+				else if(btnCircle.isSelected())
+				{
+					controller.addCircle(arg0);
+				}
+				else if(btnHexagon.isSelected())
+				{
+					controller.addHexagon(arg0);
+				}
 			}
 		});
 		
