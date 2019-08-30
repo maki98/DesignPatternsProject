@@ -67,7 +67,6 @@ public class Line extends Shape {
 		first.selected(g);
 		last.selected(g);
 		middle().selected(g);
-		
 	}
 
 	@Override

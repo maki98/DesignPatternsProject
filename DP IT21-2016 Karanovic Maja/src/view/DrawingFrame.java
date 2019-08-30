@@ -108,7 +108,8 @@ public class DrawingFrame extends JFrame {
 		pnlShapes.add(lblContourColor, "cell 0 14");
 		
 		//automatski untoggluje ostale buttone kada je jedan toggleovan
-		ButtonGroup group = new ButtonGroup();
+		CustomButtonGroup group = new CustomButtonGroup();
+		//ButtonGroup group = new ButtonGroup();
 		group.add(btnPoint);
 		group.add(btnLine);
 		group.add(btnSquare);
@@ -160,10 +161,6 @@ public class DrawingFrame extends JFrame {
 				else if(btnCircle.isSelected())
 				{
 					controller.addCircle(arg0);
-				}
-				else if(btnHexagon.isSelected())
-				{
-					controller.addHexagon(arg0);
 				}
 			}
 		});
