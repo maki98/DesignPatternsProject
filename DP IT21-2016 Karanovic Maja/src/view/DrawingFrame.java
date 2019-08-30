@@ -37,6 +37,7 @@ public class DrawingFrame extends JFrame {
 	private JToggleButton btnRectangle;
 	private JToggleButton btnCircle;
 	private JToggleButton btnHexagon;
+	private JToggleButton btnSelect;
 
 	
 	private String shapeSelected;
@@ -44,6 +45,8 @@ public class DrawingFrame extends JFrame {
 	private JButton btnContourColor;
 	private JLabel lblInsideColor;
 	private JButton btnInsideColor;
+	private JToggleButton btnModify;
+	private JToggleButton btnDelete;
 
 	/**
 	 * Launch the application.
@@ -53,6 +56,7 @@ public class DrawingFrame extends JFrame {
 			public void run() {
 				try {
 					DrawingFrame frame = new DrawingFrame();
+					frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -83,51 +87,64 @@ public class DrawingFrame extends JFrame {
 		pnlShapes = new JPanel();
 		pnlShapes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Shapes:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		contentPane.add(pnlShapes, BorderLayout.WEST);
-		pnlShapes.setLayout(new MigLayout("", "[grow]", "[][][][][][][][][][][][][][][][][][][][grow]"));
+		pnlShapes.setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][][][][][][][][][grow]"));
 		
 		btnPoint = new JToggleButton("Point");
-		pnlShapes.add(btnPoint, "cell 0 1, grow");
+		pnlShapes.add(btnPoint, "cell 0 1,grow");
 		
 		btnLine = new JToggleButton("Line");
 		
-		pnlShapes.add(btnLine, "cell 0 2, grow");
+		pnlShapes.add(btnLine, "cell 1 1,grow");
 		
 		btnSquare = new JToggleButton("Square");
-		pnlShapes.add(btnSquare, "cell 0 3, grow");
+		pnlShapes.add(btnSquare, "cell 0 2,grow");
 		
 		btnRectangle = new JToggleButton("Rectangle");
-		pnlShapes.add(btnRectangle, "cell 0 4,, grow");
+		pnlShapes.add(btnRectangle, "cell 1 2,grow");
 		
 		btnCircle = new JToggleButton("Circle");
-		pnlShapes.add(btnCircle, "cell 0 5, grow");
+		pnlShapes.add(btnCircle, "cell 0 3,grow");
 		
 		btnHexagon = new JToggleButton("Hexagon");
-		pnlShapes.add(btnHexagon, "cell 0 6, grow");
+		pnlShapes.add(btnHexagon, "cell 1 3,grow");
+		
+		btnSelect = new JToggleButton("Select");
+		pnlShapes.add(btnSelect, "cell 0 8,growx");
+
+		btnModify = new JToggleButton("Modify");
+		pnlShapes.add(btnModify, "cell 0 9,growx");
+		btnModify.setEnabled(false);
+		
+		btnDelete = new JToggleButton("Delete");
+		pnlShapes.add(btnDelete, "cell 1 9,growx");
+		btnDelete.setEnabled(false);
+		
+		//group for shapes - allow only one button in a group to be selected at time
+		CustomButtonGroup shapesGroup = new CustomButtonGroup();
+		shapesGroup.add(btnPoint);
+		shapesGroup.add(btnLine);
+		shapesGroup.add(btnSquare);
+		shapesGroup.add(btnCircle);
+		shapesGroup.add(btnRectangle);
+		shapesGroup.add(btnHexagon);
+		shapesGroup.add(btnSelect);
+		shapesGroup.add(btnModify);
+		shapesGroup.add(btnDelete);
 		
 		lblContourColor = new JLabel("Contour color:");
-		pnlShapes.add(lblContourColor, "cell 0 14");
+		pnlShapes.add(lblContourColor, "cell 0 5");
 		
-		//automatski untoggluje ostale buttone kada je jedan toggleovan
-		CustomButtonGroup group = new CustomButtonGroup();
-		//ButtonGroup group = new ButtonGroup();
-		group.add(btnPoint);
-		group.add(btnLine);
-		group.add(btnSquare);
-		group.add(btnCircle);
-		group.add(btnRectangle);
-		group.add(btnHexagon);
-
-		btnContourColor = new JButton("     ");
-		btnContourColor.setBackground(Color.BLACK);
-		btnContourColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.chooseContourColor();
-			}
-		});
-		pnlShapes.add(btnContourColor, "cell 0 15, grow");
-		
-		lblInsideColor = new JLabel("Inside color:");
-		pnlShapes.add(lblInsideColor, "cell 0 16");
+				btnContourColor = new JButton("     ");
+				btnContourColor.setBackground(Color.BLACK);
+				btnContourColor.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						controller.chooseContourColor();
+					}
+				});
+				
+				lblInsideColor = new JLabel("Inside color:");
+				pnlShapes.add(lblInsideColor, "cell 1 5");
+				pnlShapes.add(btnContourColor, "cell 0 6,grow");
 		
 		btnInsideColor = new JButton("     ");
 		btnInsideColor.setBackground(Color.WHITE);
@@ -136,7 +153,8 @@ public class DrawingFrame extends JFrame {
 				controller.chooseInsideColor();
 			}
 		});
-		pnlShapes.add(btnInsideColor, "cell 0 17, grow");
+		pnlShapes.add(btnInsideColor, "cell 1 6,grow");
+		
 		
 		//mouse event listener
 		view.addMouseListener(new MouseAdapter() {
@@ -162,10 +180,12 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.addCircle(arg0);
 				}
+				else if(btnSelect.isSelected()) 
+				{
+					controller.selectShapes(arg0);
+				}
 			}
 		});
-		
-		
 	}
 	
 	public DrawingView getView()
@@ -201,6 +221,23 @@ public class DrawingFrame extends JFrame {
 	public void setBtnInsideColor(JButton btnInsideColor) {
 		this.btnInsideColor = btnInsideColor;
 	}
+
+	public JToggleButton getBtnModify() {
+		return btnModify;
+	}
+
+	public void setBtnModify(JToggleButton btnModify) {
+		this.btnModify = btnModify;
+	}
+
+	public JToggleButton getBtnDelete() {
+		return btnDelete;
+	}
+
+	public void setBtnDelete(JToggleButton btnDelete) {
+		this.btnDelete = btnDelete;
+	}
+	
 	
 
 

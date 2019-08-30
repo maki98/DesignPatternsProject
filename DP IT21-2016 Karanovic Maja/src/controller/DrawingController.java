@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JColorChooser;
 
@@ -31,6 +33,8 @@ public class DrawingController {
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
 	
+	private ArrayList<Shape> selected = new ArrayList<Shape>();
+	
 	public DrawingController(DrawingModel model, DrawingFrame frame)
 	{
 		this.model = model;
@@ -39,6 +43,7 @@ public class DrawingController {
 	
 	public void addPoint(MouseEvent arg0)
 	{
+		
 		Point p = new Point(arg0.getX(), arg0.getY(), contourColor);
 		cmdAddShape = new CmdAddShape(model, p);
 		cmdAddShape.execute();
@@ -122,7 +127,19 @@ public class DrawingController {
 		}
 	}
 
-
-
-
+	public void selectShapes(MouseEvent arg0) {
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext())
+		{
+			Shape shape = it.next();
+			if(shape.contains(arg0.getX(), arg0.getY()))
+			{
+				shape.setSelected(true);
+				//frame.getBtnDelete().setEnabled(true);
+				//frame.getBtnModify().setEnabled(true);
+			}
+		}
+	}
+	
+	
 }

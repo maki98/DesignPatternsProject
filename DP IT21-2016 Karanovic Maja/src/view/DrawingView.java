@@ -22,8 +22,11 @@ public class DrawingView extends JPanel {
 			{
 				it.next().drawShape(g);
 			}
+			repaint();
+			
 		}
 	}
+	
 	
 	public void setModel(DrawingModel model)
 	{
