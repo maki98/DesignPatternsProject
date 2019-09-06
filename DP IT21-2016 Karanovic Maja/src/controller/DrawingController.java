@@ -3,11 +3,15 @@ package controller;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
+import javax.sound.sampled.ReverbType;
 import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
 
 import command.CmdAddShape;
+import command.CmdRemoveShape;
 import dialogs.DlgForCircle;
 import dialogs.DlgForHexagon;
 import dialogs.DlgForRectangle;
@@ -20,6 +24,7 @@ import geometry.Rectangle;
 import geometry.Shape;
 import geometry.Square;
 import hexagon.Hexagon;
+import observer.DrawingObserver;
 import view.DrawingFrame;
 
 public class DrawingController {
@@ -29,11 +34,13 @@ public class DrawingController {
 	private Point firstPointOfLine;
 	
 	private CmdAddShape cmdAddShape;
+	private CmdRemoveShape cmdRemoveShape;
 	
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
 	
 	private ArrayList<Shape> selected = new ArrayList<Shape>();
+	
 	
 	public DrawingController(DrawingModel model, DrawingFrame frame)
 	{
@@ -48,6 +55,8 @@ public class DrawingController {
 		cmdAddShape = new CmdAddShape(model, p);
 		cmdAddShape.execute();
 		frame.getView().repaint();
+		
+		p.addObserver(new DrawingObserver(model, frame));
 	}
 	
 	public void addLine(MouseEvent arg0)
@@ -64,6 +73,9 @@ public class DrawingController {
 			cmdAddShape.execute();
 			frame.getView().repaint();
 			firstPointOfLine = null;
+			
+			l.addObserver(new DrawingObserver(model, frame));
+
 		}
 	}
 	
@@ -77,6 +89,9 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, s);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			
+			s.addObserver(new DrawingObserver(model, frame));
+
 		}
 	}
 
@@ -90,6 +105,9 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, r);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			
+			r.addObserver(new DrawingObserver(model, frame));
+
 		}	
 	}
 	
@@ -103,6 +121,9 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, c);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			
+			c.addObserver(new DrawingObserver(model, frame));
+
 		}
 	}
 	
@@ -128,18 +149,52 @@ public class DrawingController {
 	}
 
 	public void selectShapes(MouseEvent arg0) {
-		Iterator<Shape> it = model.getAll().iterator();
-		while(it.hasNext())
+		//Iterator<Shape> it = model.getAll().iterator();
+		for(int i = model.getAll().size()-1;i>=0;i--)
 		{
-			Shape shape = it.next();
-			if(shape.contains(arg0.getX(), arg0.getY()))
+			if(model.get(i).contains(arg0.getX(), arg0.getY()))
 			{
-				shape.setSelected(true);
-				//frame.getBtnDelete().setEnabled(true);
-				//frame.getBtnModify().setEnabled(true);
+				if(model.get(i).isSelected() == false)
+				{
+					model.get(i).setSelected(true);
+					break;
+				}
+				else if (model.get(i).isSelected() == true)
+				{
+					model.get(i).setSelected(false);
+					break;
+				}
 			}
 		}
 	}
 	
-	
+	public void unselectShapes(MouseEvent arg0) {
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext())
+		{
+			Shape shape = it.next();
+			shape.setSelected(false);
+		}
+	}
+
+	public void removeShapes(MouseEvent arg0) {
+		if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected shape?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
+			Iterator<Shape> it = model.getAll().iterator();
+			while(it.hasNext()) {
+				Shape s = it.next();
+				
+				if(s.isSelected())
+				{
+					s.setSelected(false);
+					cmdRemoveShape = new CmdRemoveShape(model, s);
+					it.remove();
+					cmdRemoveShape.execute();
+				}
+					
+				}
+			}
+		} 
 }
+
+
+

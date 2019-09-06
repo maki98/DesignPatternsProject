@@ -3,6 +3,9 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import geometry.Line;
+import geometry.Point;
+
 public class Rectangle extends Square {
 
 	private int height;
@@ -79,11 +82,11 @@ public class Rectangle extends Square {
 	public void selected(Graphics g) 
 	{
 		g.setColor(Color.BLUE);
-		//OVO ISPRAVITI TREBA
-		new Line(getUpperLeft(), new Point(getUpperLeft().getX()+pageLength, getUpperLeft().getY())).selected(g);
-		new Line(getUpperLeft(), new Point(getUpperLeft().getX(), getUpperLeft().getY()+height)).selected(g);
-		new Line(new Point(getUpperLeft().getX()+pageLength, getUpperLeft().getY()), diagonal().getLast()).selected(g);
-		new Line(new Point(getUpperLeft().getX(), getUpperLeft().getY()+height), diagonal().getLast()).selected(g);
+		g.setColor(Color.BLUE);
+		new Line(upperLeft, new Point(upperLeft.getX() + pageLength, upperLeft.getY())).selected(g);
+		new Line(upperLeft, new Point(upperLeft.getX(), upperLeft.getY() + height)).selected(g);
+		new Line(new Point(upperLeft.getX() + pageLength, upperLeft.getY()), diagonal().getLast()).selected(g);
+		new Line(new Point(upperLeft.getX(), upperLeft.getY() + height), diagonal().getLast()).selected(g);
 	}
 	
 	public void fill(Graphics g) 
@@ -95,13 +98,8 @@ public class Rectangle extends Square {
 
 	public boolean contains(int x, int y) 
 	{
-		if(this.getUpperLeft().getX()<=x 
-				&& x<=(this.getUpperLeft().getX() + height)
-				&& this.getUpperLeft().getY()<=y 
-				&& y<=(this.getUpperLeft().getY() + pageLength))
-			return true;
-		else 
-			return false;
+		return upperLeft.getX() <= x && x <= (upperLeft.getX() + pageLength) && upperLeft.getY() <= y
+				&& y <= (upperLeft.getY() + height);
 	}
 	
 	public int getHeight()

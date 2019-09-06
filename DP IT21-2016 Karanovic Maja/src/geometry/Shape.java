@@ -2,8 +2,9 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Observable;
 
-public abstract class Shape implements Moveable, Comparable<Object> {
+public abstract class Shape extends Observable implements Moveable, Comparable<Object> {
 	
 	private Color color;
 	private String colorString;
@@ -81,5 +82,8 @@ public abstract class Shape implements Moveable, Comparable<Object> {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+		setChanged();
+		System.out.println("OBAVESTEN");
+		notifyObservers();
 	}
 }

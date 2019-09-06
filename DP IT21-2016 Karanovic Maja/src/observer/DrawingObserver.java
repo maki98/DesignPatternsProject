@@ -3,36 +3,48 @@ package observer;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 
+import geometry.DrawingModel;
 import view.DrawingFrame;
 
-public class DrawingObserver implements PropertyChangeListener {
+public class DrawingObserver implements Observer {
 	
-	DrawingFrame frame;
+	private DrawingModel model;
+	private DrawingFrame frame;
 	
-	public DrawingObserver(DrawingFrame frame) {
-		this.frame = frame;
+	public DrawingObserver (DrawingModel model, DrawingFrame frame) 
+	{
+		this.model=model;
+		this.frame=frame;
 	}
 	
-	public void addListener(JButton button, MouseAdapter adapter) {
-		if (button.isEnabled() == false) {
-			button.setEnabled(true);
-			button.addMouseListener(adapter);
-		}
-	}
-	
-	public void removeListener(JButton button, MouseAdapter adapter) {
-		if (button.isEnabled()) {
-			button.removeMouseListener(adapter);
-			button.setEnabled(false);
-		}
-	}
-
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+	public void update(Observable arg0, Object arg1) {
+
+		int count = 0;
+		for(geometry.Shape shape : model.getAll()) 
+		{
+			if(shape.isSelected())
+			{
+				count++;
+			}
+		}
 		
+		if(count == 0) {
+			frame.getBtnModify().setEnabled(false);
+			frame.getBtnDelete().setEnabled(false);
+		}
+		else {
+			frame.getBtnModify().setEnabled(true);
+			frame.getBtnDelete().setEnabled(true);
+		}
 	}
+	
+
 }
+
+

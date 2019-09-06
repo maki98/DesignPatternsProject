@@ -21,6 +21,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class DrawingFrame extends JFrame {
 
@@ -90,25 +92,66 @@ public class DrawingFrame extends JFrame {
 		pnlShapes.setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][][][][][][][][][grow]"));
 		
 		btnPoint = new JToggleButton("Point");
+		btnPoint.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnPoint, "cell 0 1,grow");
 		
 		btnLine = new JToggleButton("Line");
-		
+		btnLine.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnLine, "cell 1 1,grow");
 		
 		btnSquare = new JToggleButton("Square");
+		btnSquare.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnSquare, "cell 0 2,grow");
 		
 		btnRectangle = new JToggleButton("Rectangle");
+		btnRectangle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnRectangle, "cell 1 2,grow");
 		
 		btnCircle = new JToggleButton("Circle");
+		btnCircle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnCircle, "cell 0 3,grow");
 		
 		btnHexagon = new JToggleButton("Hexagon");
+		btnHexagon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.unselectShapes(e);
+			}
+		});
 		pnlShapes.add(btnHexagon, "cell 1 3,grow");
 		
 		btnSelect = new JToggleButton("Select");
+		btnSelect.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				controller.unselectShapes(arg0);
+			}
+		});
 		pnlShapes.add(btnSelect, "cell 0 8,growx");
 
 		btnModify = new JToggleButton("Modify");
@@ -116,6 +159,12 @@ public class DrawingFrame extends JFrame {
 		btnModify.setEnabled(false);
 		
 		btnDelete = new JToggleButton("Delete");
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.removeShapes(e);
+			}
+		});
 		pnlShapes.add(btnDelete, "cell 1 9,growx");
 		btnDelete.setEnabled(false);
 		
@@ -128,8 +177,10 @@ public class DrawingFrame extends JFrame {
 		shapesGroup.add(btnRectangle);
 		shapesGroup.add(btnHexagon);
 		shapesGroup.add(btnSelect);
-		shapesGroup.add(btnModify);
-		shapesGroup.add(btnDelete);
+		
+		CustomButtonGroup updateShapesGroup = new CustomButtonGroup();
+		updateShapesGroup.add(btnModify);
+		updateShapesGroup.add(btnDelete);
 		
 		lblContourColor = new JLabel("Contour color:");
 		pnlShapes.add(lblContourColor, "cell 0 5");
