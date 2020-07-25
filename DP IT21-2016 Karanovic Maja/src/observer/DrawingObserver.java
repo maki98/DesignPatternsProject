@@ -33,7 +33,7 @@ public class DrawingObserver implements Observer {
 				count++;
 			}
 		}
-		
+				
 		if(count == 0) {
 			frame.getBtnModify().setEnabled(false);
 			frame.getBtnDelete().setEnabled(false);

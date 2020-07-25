@@ -165,6 +165,7 @@ public class DrawingFrame extends JFrame {
 				controller.removeShapes(e);
 			}
 		});
+		
 		pnlShapes.add(btnDelete, "cell 1 9,growx");
 		btnDelete.setEnabled(false);
 		
@@ -289,6 +290,13 @@ public class DrawingFrame extends JFrame {
 		this.btnDelete = btnDelete;
 	}
 	
+	public JToggleButton getBtnSelect() {
+		return btnSelect;
+	}
+
+	public void setBtnSelect(JToggleButton btnSelect) {
+		this.btnSelect = btnSelect;
+	}
 	
 
 

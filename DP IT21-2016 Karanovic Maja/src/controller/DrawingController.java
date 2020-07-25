@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import command.CmdAddShape;
 import command.CmdRemoveShape;
 import dialogs.DlgForCircle;
-import dialogs.DlgForHexagon;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
 import geometry.Circle;
@@ -23,7 +22,6 @@ import geometry.Point;
 import geometry.Rectangle;
 import geometry.Shape;
 import geometry.Square;
-import hexagon.Hexagon;
 import observer.DrawingObserver;
 import view.DrawingFrame;
 
@@ -40,8 +38,7 @@ public class DrawingController {
 	private Color insideColor = Color.WHITE;
 	
 	private ArrayList<Shape> selected = new ArrayList<Shape>();
-	
-	
+		
 	public DrawingController(DrawingModel model, DrawingFrame frame)
 	{
 		this.model = model;
@@ -149,7 +146,6 @@ public class DrawingController {
 	}
 
 	public void selectShapes(MouseEvent arg0) {
-		//Iterator<Shape> it = model.getAll().iterator();
 		for(int i = model.getAll().size()-1;i>=0;i--)
 		{
 			if(model.get(i).contains(arg0.getX(), arg0.getY()))
@@ -178,22 +174,31 @@ public class DrawingController {
 	}
 
 	public void removeShapes(MouseEvent arg0) {
-		if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected shape?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
-			Iterator<Shape> it = model.getAll().iterator();
-			while(it.hasNext()) {
-				Shape s = it.next();
-				
-				if(s.isSelected())
-				{
-					s.setSelected(false);
-					cmdRemoveShape = new CmdRemoveShape(model, s);
-					it.remove();
-					cmdRemoveShape.execute();
-				}
+		
+		if(frame.getBtnDelete().isEnabled())
+		{
+			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected shape?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
+				Iterator<Shape> it = model.getAll().iterator();
+				while(it.hasNext()) {
+					Shape s = it.next();
 					
+					if(s.isSelected())
+					{
+						s.setSelected(false);
+						cmdRemoveShape = new CmdRemoveShape(model, s);
+						it.remove();
+	
+						cmdRemoveShape.execute();
+					}	
 				}
+				frame.getBtnSelect().setSelected(false);
 			}
-		} 
+			frame.getBtnDelete().setSelected(false);
+
+		}
+		
+	
+	}
 }
 
 
