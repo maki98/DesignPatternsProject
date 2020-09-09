@@ -62,6 +62,10 @@ public class DrawingFrame extends JFrame {
 	
 	private DefaultListModel<String> dlm = new DefaultListModel<String>(); 
 	private JButton btnClearAll;
+	private JToggleButton btnToBack;
+	private JToggleButton btnBringToBack;
+	private JToggleButton btnToFront;
+	private JToggleButton btnBringToFront;
 
 	/**
 	 * Launch the application.
@@ -177,11 +181,51 @@ public class DrawingFrame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				controller.removeShapes(e);
 			}
-		});
-		
+		});	
 		pnlShapes.add(btnDelete, "cell 1 9,growx");
 		btnDelete.setEnabled(false);
 		
+		btnToBack = new JToggleButton("To back");
+		btnToBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.toBack();
+			}
+		});
+		pnlShapes.add(btnToBack, "cell 0 11,grow");
+		btnToBack.setEnabled(false);
+		
+		
+		btnBringToBack = new JToggleButton("Bring to back");
+		btnBringToBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.toBack();
+			}
+		});
+		btnBringToBack.setEnabled(false);
+		pnlShapes.add(btnBringToBack, "cell 1 11,grow");
+		
+		btnToFront = new JToggleButton("To front");
+		btnToFront.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.toFront();
+			}
+		});
+		btnToFront.setEnabled(false);
+		pnlShapes.add(btnToFront, "cell 0 12,grow");
+		
+		btnBringToFront = new JToggleButton("Bring to front");
+		btnBringToFront.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.toBack();
+			}
+		});
+		btnBringToFront.setEnabled(false);
+		pnlShapes.add(btnBringToFront, "cell 1 12,grow");
+
 		//group for shapes - allow only one button in a group to be selected at time
 		CustomButtonGroup shapesGroup = new CustomButtonGroup();
 		shapesGroup.add(btnPoint);
@@ -191,6 +235,10 @@ public class DrawingFrame extends JFrame {
 		shapesGroup.add(btnRectangle);
 		shapesGroup.add(btnHexagon);
 		shapesGroup.add(btnSelect);
+		shapesGroup.add(btnToBack);
+		shapesGroup.add(btnBringToBack);
+		shapesGroup.add(btnToFront);
+		shapesGroup.add(btnBringToFront);
 		
 		CustomButtonGroup updateShapesGroup = new CustomButtonGroup();
 		updateShapesGroup.add(btnModify);
@@ -198,6 +246,7 @@ public class DrawingFrame extends JFrame {
 
 		//updateShapesGroup.add(btnInsideColor);
 		updateShapesGroup.add(btnContourColor);
+	
 		
 		lblContourColor = new JLabel("Contour color:");
 		pnlShapes.add(lblContourColor, "cell 0 5");
@@ -223,6 +272,10 @@ public class DrawingFrame extends JFrame {
 			}
 		});
 		pnlShapes.add(btnInsideColor, "cell 1 6,grow");
+		
+
+		
+
 		
 	
 		//ubacivanje panela za logove
@@ -268,10 +321,58 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.selectShapes(arg0);
 				}
+				/*else if(btnToBack.isSelected()) 
+				{
+					controller.toBack(arg0);
+				}
+				else if(btnBringToBack.isSelected()) 
+				{
+					controller.toBack(arg0);
+				}
+				else if(btnToFront.isSelected()) 
+				{
+					controller.toBack(arg0);
+				}
+				else if(btnBringToFront.isSelected()) 
+				{
+					controller.toBack(arg0);
+				}*/
 			}
 		});
 	}
 	
+	public JToggleButton getBtnBringToBack() {
+		return btnBringToBack;
+	}
+
+	public void setBtnBringToBack(JToggleButton btnBringToBack) {
+		this.btnBringToBack = btnBringToBack;
+	}
+
+	public JToggleButton getBtnToFront() {
+		return btnToFront;
+	}
+
+	public void setBtnToFront(JToggleButton btnToFront) {
+		this.btnToFront = btnToFront;
+	}
+
+	public JToggleButton getBtnBringToFront() {
+		return btnBringToFront;
+	}
+
+	public void setBtnBringToFront(JToggleButton btnBringToFront) {
+		this.btnBringToFront = btnBringToFront;
+	}
+
+	public JToggleButton getBtnToBack() {
+		return btnToBack;
+	}
+
+	public void setBtnToBack(JToggleButton btnToBack) {
+		this.btnToBack = btnToBack;
+	}
+
 	public DrawingView getView()
 	{
 		return view;

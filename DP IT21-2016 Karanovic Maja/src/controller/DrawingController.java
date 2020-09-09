@@ -11,8 +11,12 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
 import command.CmdAddShape;
+import command.CmdBringToBack;
+import command.CmdBringToFront;
 import command.CmdRemoveShape;
 import command.CmdSelect;
+import command.CmdToBack;
+import command.CmdToFront;
 import dialogs.DlgForCircle;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
@@ -35,6 +39,10 @@ public class DrawingController {
 	private CmdAddShape cmdAddShape;
 	private CmdRemoveShape cmdRemoveShape;
 	private CmdSelect cmdSelect;
+	private CmdToBack cmdToBack;
+	private CmdToFront cmdToFront;
+	private CmdBringToBack cmdBringToBack;
+	private CmdBringToFront cmdBringToFront;
 	
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
@@ -206,14 +214,75 @@ public class DrawingController {
 				}
 				frame.getBtnSelect().setSelected(false);
 			}
-			frame.getBtnDelete().setSelected(false);
 
 		}
 		
 	}
 	
-		
+	public void toBack() {
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext()) {
+			Shape s = it.next();
+					
+			if(s.isSelected())
+			{
+				s.setSelected(false);
+				cmdToBack = new CmdToBack(model, s);
+	
+				try {
+					cmdToBack.execute();
+					frame.addToLog(cmdToBack.toString());
+				}
+				catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Element is already on the back");										
+				}
+			}	
+		}
+		frame.getBtnSelect().setSelected(false);
 	}
+	
+
+	public void toFront() {
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext()) {
+			Shape s = it.next();
+					
+			if(s.isSelected())
+			{
+				s.setSelected(false);
+				cmdToFront = new CmdToFront(model, s);
+	
+				try {
+					cmdToFront.execute();
+					frame.addToLog(cmdToFront.toString());
+				}
+				catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Element is already on the front");					
+				}
+			}	
+		}
+		frame.getBtnSelect().setSelected(false);
+	}
+
+	/*public void bringToBack() {
+		for (Shape s : model.getAll()) {
+			if (s.isSelected()) {
+				executeCommands(new CMDBringToBack(s, model));
+				break;
+			}
+		}
+	}
+
+	public void bringToFront() {
+		for (Shape s : model.getAll()) {
+			if (s.isSelected()) {
+				executeCommands(new CMDBringToFront(s, model));
+				break;
+			}
+		}
+	}*/
+	
+}
 
 
 

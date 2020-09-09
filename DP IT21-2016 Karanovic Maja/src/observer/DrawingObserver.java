@@ -37,14 +37,34 @@ public class DrawingObserver implements Observer {
 		if(count == 0) {
 			frame.getBtnModify().setEnabled(false);
 			frame.getBtnDelete().setEnabled(false);
+			
+			frame.getBtnToBack().setEnabled(false);
+			frame.getBtnBringToBack().setEnabled(false);
+			frame.getBtnToFront().setEnabled(false);
+			frame.getBtnBringToFront().setEnabled(false);
+
 		}
 		else if (count > 1){
 			frame.getBtnModify().setEnabled(false);
 			frame.getBtnDelete().setEnabled(true);
+			
+			frame.getBtnToBack().setEnabled(false);
+			frame.getBtnBringToBack().setEnabled(false);
+			frame.getBtnToFront().setEnabled(false);
+			frame.getBtnBringToFront().setEnabled(false);
+
+
 		}
 		else {
 			frame.getBtnModify().setEnabled(true);
 			frame.getBtnDelete().setEnabled(true);
+			
+			frame.getBtnToBack().setEnabled(true);
+			frame.getBtnBringToBack().setEnabled(true);
+			frame.getBtnToFront().setEnabled(true);
+			frame.getBtnBringToFront().setEnabled(true);
+
+
 		}
 	}
 	
