@@ -3,31 +3,30 @@ package command;
 import geometry.DrawingModel;
 import geometry.Shape;
 
-public class CmdRemoveShape implements Command {
+public class CmdSelect implements Command {
 
 	private DrawingModel model;
 	private Shape shape;
 	
-	public CmdRemoveShape(DrawingModel model, Shape shape)
+	public CmdSelect(Shape shape)
 	{
-		this.model = model;
 		this.shape = shape;
 	}
 	
 	@Override
 	public void execute() {
-		model.remove(shape); 
+		shape.setSelected(true);
 		System.out.println(this.toString());
 	}
 
 	@Override
 	public void unexecute() {
-		model.add(shape);
+		shape.setSelected(false);
 	}
 	
-	@Override 
+	@Override
 	public String toString() {
-		return "remove->" + shape.toString();
+		return "select->" + shape.toString();
 	}
 	
 }

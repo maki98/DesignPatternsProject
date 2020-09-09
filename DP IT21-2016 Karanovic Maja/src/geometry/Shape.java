@@ -83,7 +83,6 @@ public abstract class Shape extends Observable implements Moveable, Comparable<O
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 		setChanged();
-		System.out.println("OBAVESTEN");
 		notifyObservers();
 	}
 }

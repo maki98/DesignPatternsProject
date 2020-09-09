@@ -103,7 +103,7 @@ public class Square extends SurfaceShape {
 	
 	public String toString() 
 	{
-		return "Upper left point = " + upperLeft + ", page length = " + pageLength + ", contour color = " + findColorString(getColor()) + ", inside color = " + findColorString(getInsideColor());
+		return "square->upperLeft:" + upperLeft + ",length:" + pageLength + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
 	}
 	
 	public Line diagonal()

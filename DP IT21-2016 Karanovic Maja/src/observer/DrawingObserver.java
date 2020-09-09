@@ -38,6 +38,10 @@ public class DrawingObserver implements Observer {
 			frame.getBtnModify().setEnabled(false);
 			frame.getBtnDelete().setEnabled(false);
 		}
+		else if (count > 1){
+			frame.getBtnModify().setEnabled(false);
+			frame.getBtnDelete().setEnabled(true);
+		}
 		else {
 			frame.getBtnModify().setEnabled(true);
 			frame.getBtnDelete().setEnabled(true);

@@ -80,7 +80,7 @@ public class Line extends Shape {
 	
 	public String toString() 
 	{
-		return first + "->" + last;
+		return "line->first:" + first + ",last:" + last;
 	}
 	
 	public double length()

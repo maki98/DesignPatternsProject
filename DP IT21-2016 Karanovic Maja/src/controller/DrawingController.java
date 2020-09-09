@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import command.CmdAddShape;
 import command.CmdRemoveShape;
+import command.CmdSelect;
 import dialogs.DlgForCircle;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
@@ -33,6 +34,7 @@ public class DrawingController {
 	
 	private CmdAddShape cmdAddShape;
 	private CmdRemoveShape cmdRemoveShape;
+	private CmdSelect cmdSelect;
 	
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
@@ -52,7 +54,7 @@ public class DrawingController {
 		cmdAddShape = new CmdAddShape(model, p);
 		cmdAddShape.execute();
 		frame.getView().repaint();
-		
+		frame.addToLog(cmdAddShape.toString());
 		p.addObserver(new DrawingObserver(model, frame));
 	}
 	
@@ -69,6 +71,7 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, l);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			frame.addToLog(cmdAddShape.toString());
 			firstPointOfLine = null;
 			
 			l.addObserver(new DrawingObserver(model, frame));
@@ -86,6 +89,7 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, s);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			frame.addToLog(cmdAddShape.toString());
 			
 			s.addObserver(new DrawingObserver(model, frame));
 
@@ -102,6 +106,7 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, r);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			frame.addToLog(cmdAddShape.toString());
 			
 			r.addObserver(new DrawingObserver(model, frame));
 
@@ -118,6 +123,7 @@ public class DrawingController {
 			cmdAddShape = new CmdAddShape(model, c);
 			cmdAddShape.execute();
 			frame.getView().repaint();
+			frame.addToLog(cmdAddShape.toString());
 			
 			c.addObserver(new DrawingObserver(model, frame));
 
@@ -152,12 +158,18 @@ public class DrawingController {
 			{
 				if(model.get(i).isSelected() == false)
 				{
-					model.get(i).setSelected(true);
+					CmdSelect cmdSelect = new CmdSelect(model.get(i));
+					cmdSelect.execute();
+					frame.addToLog(cmdSelect.toString());
+
+					//model.get(i).setSelected(true);
 					break;
 				}
 				else if (model.get(i).isSelected() == true)
 				{
-					model.get(i).setSelected(false);
+					CmdSelect cmdSelect = new CmdSelect(model.get(i));
+					cmdSelect.unexecute();
+					//model.get(i).setSelected(false);
 					break;
 				}
 			}
@@ -189,6 +201,7 @@ public class DrawingController {
 						it.remove();
 	
 						cmdRemoveShape.execute();
+						frame.addToLog(cmdRemoveShape.toString());
 					}	
 				}
 				frame.getBtnSelect().setSelected(false);
@@ -197,9 +210,11 @@ public class DrawingController {
 
 		}
 		
-	
 	}
-}
+	
+		
+	}
+
 
 
 

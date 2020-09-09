@@ -17,11 +17,17 @@ public class CmdAddShape implements Command {
 	@Override
 	public void execute() {
 		model.add(shape);
+		System.out.println(this.toString());
 	}
 
 	@Override
 	public void unexecute() {
 		model.remove(shape);
+	}
+	
+	@Override
+	public String toString() {
+		return "add->" + shape.toString();
 	}
 	
 }

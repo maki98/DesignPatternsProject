@@ -44,7 +44,7 @@ public class Rectangle extends Square {
 	
 	public String toString()
 	{
-		return "Upper left point = " + upperLeft + ", length = " + pageLength + ", height= " + height;		
+		return "rectangle->upperLeft:" + upperLeft + ",lengt:" + pageLength + ",height:" + height + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());		
 	}
 	
 	public boolean equals(Object obj) 

@@ -2,10 +2,14 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -15,20 +19,26 @@ import controller.DrawingController;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 public class DrawingFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel pnlShapes;
+	private JPanel pnlLog;
 	private DrawingView view = new DrawingView();
 	private DrawingController controller;
 	
@@ -40,8 +50,6 @@ public class DrawingFrame extends JFrame {
 	private JToggleButton btnCircle;
 	private JToggleButton btnHexagon;
 	private JToggleButton btnSelect;
-
-	
 	private String shapeSelected;
 	private JLabel lblContourColor;
 	private JButton btnContourColor;
@@ -49,6 +57,11 @@ public class DrawingFrame extends JFrame {
 	private JButton btnInsideColor;
 	private JToggleButton btnModify;
 	private JToggleButton btnDelete;
+	
+	private JScrollPane spLog;
+	
+	private DefaultListModel<String> dlm = new DefaultListModel<String>(); 
+	private JButton btnClearAll;
 
 	/**
 	 * Launch the application.
@@ -73,7 +86,7 @@ public class DrawingFrame extends JFrame {
 	public DrawingFrame() {
 		setTitle("Maja Karanovic IT21/2016");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 1040, 800);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -182,12 +195,16 @@ public class DrawingFrame extends JFrame {
 		CustomButtonGroup updateShapesGroup = new CustomButtonGroup();
 		updateShapesGroup.add(btnModify);
 		updateShapesGroup.add(btnDelete);
+
+		//updateShapesGroup.add(btnInsideColor);
+		updateShapesGroup.add(btnContourColor);
 		
 		lblContourColor = new JLabel("Contour color:");
 		pnlShapes.add(lblContourColor, "cell 0 5");
 		
 				btnContourColor = new JButton("     ");
 				btnContourColor.setBackground(Color.BLACK);
+				
 				btnContourColor.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						controller.chooseContourColor();
@@ -207,6 +224,21 @@ public class DrawingFrame extends JFrame {
 		});
 		pnlShapes.add(btnInsideColor, "cell 1 6,grow");
 		
+	
+		//ubacivanje panela za logove
+		pnlLog = new JPanel();
+		getContentPane().add(pnlLog, BorderLayout.SOUTH);
+		
+		spLog = new JScrollPane();
+		spLog.setPreferredSize(new Dimension(1000, 200));
+		pnlLog.add(spLog);
+		
+		JList<String> jlLog = new JList<String>();
+		jlLog.setBackground(UIManager.getColor("Button.background"));
+		jlLog.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Logs:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		spLog.setViewportView(jlLog);
+
+		jlLog.setModel(dlm);
 		
 		//mouse event listener
 		view.addMouseListener(new MouseAdapter() {
@@ -298,6 +330,10 @@ public class DrawingFrame extends JFrame {
 		this.btnSelect = btnSelect;
 	}
 	
-
+	public void addToLog(String s) {
+		this.dlm.addElement(s);
+		JScrollBar sb = spLog.getVerticalScrollBar();
+		sb.setValue(sb.getMaximum()); 
+	}
 
 }

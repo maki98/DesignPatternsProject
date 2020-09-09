@@ -90,7 +90,7 @@ public class Point extends Shape {
 	
 	public String toString()
 	{
-		return "(" + x + ", " + y + ", " +  this.getColorString() + ")";
+		return "point->(" + x + ", " + y + ", " +  this.getColorString() + ")";
 	}
 
 	public int getX() 

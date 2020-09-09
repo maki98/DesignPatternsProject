@@ -55,33 +55,40 @@ public class Circle extends SurfaceShape {
 		return radius*radius*Math.PI;
 		
 	}
+	
+	public String toString() 
+	{
+		return "circle->center:" + center + ",radius:" + radius + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
+	}
+	
 	@Override
 	public double perimeter() {
 		return 2*radius*Math.PI;
 	}
+	
 	@Override
 	public void fill(Graphics g) {
 		g.setColor(getInsideColor());
 		g.fillOval(center.getX()-radius+1, center.getY()-radius+1, 2*radius-2, 2*radius-2);
-	
 	}
+	
 	@Override
 	public void drawShape(Graphics g) {
-
 		g.setColor(getColor());
 		g.drawOval(center.getX()-radius, center.getY()-radius, 2*radius, 2*radius);
 		fill(g);
 		if(isSelected())
 			selected(g);
 	}
+	
 	@Override
 	public void selected(Graphics g) {
 		new Line(new Point(center.getX(), center.getY()-radius), 
 				new Point(center.getX(), center.getY() + radius)).selected(g);
 		new Line(new Point(center.getX()-radius, center.getY()), 
 				new Point(center.getX()+radius, center.getY())).selected(g);
-		
 	}
+	
 	@Override
 	public boolean contains(int x, int y) {
 
