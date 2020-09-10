@@ -200,7 +200,7 @@ public class DrawingFrame extends JFrame {
 		btnBringToBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				controller.toBack();
+				controller.bringToBack();
 			}
 		});
 		btnBringToBack.setEnabled(false);
@@ -220,7 +220,7 @@ public class DrawingFrame extends JFrame {
 		btnBringToFront.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				controller.toBack();
+				controller.bringToFront();
 			}
 		});
 		btnBringToFront.setEnabled(false);
@@ -321,22 +321,6 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.selectShapes(arg0);
 				}
-				/*else if(btnToBack.isSelected()) 
-				{
-					controller.toBack(arg0);
-				}
-				else if(btnBringToBack.isSelected()) 
-				{
-					controller.toBack(arg0);
-				}
-				else if(btnToFront.isSelected()) 
-				{
-					controller.toBack(arg0);
-				}
-				else if(btnBringToFront.isSelected()) 
-				{
-					controller.toBack(arg0);
-				}*/
 			}
 		});
 	}

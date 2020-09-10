@@ -232,9 +232,10 @@ public class DrawingController {
 				try {
 					cmdToBack.execute();
 					frame.addToLog(cmdToBack.toString());
-				}
+				}				//ako nema sa cim da se zameni
 				catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Element is already on the back");										
+					JOptionPane.showMessageDialog(null, "Element is already on the back");	
+					s.setSelected(false);
 				}
 			}	
 		}
@@ -255,32 +256,65 @@ public class DrawingController {
 				try {
 					cmdToFront.execute();
 					frame.addToLog(cmdToFront.toString());
-				}
+				}				//ako nema sa cim da se zameni
 				catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Element is already on the front");					
+					JOptionPane.showMessageDialog(null, "Element is already on the front");		
+					s.setSelected(false);
 				}
 			}	
 		}
 		frame.getBtnSelect().setSelected(false);
 	}
 
-	/*public void bringToBack() {
-		for (Shape s : model.getAll()) {
-			if (s.isSelected()) {
-				executeCommands(new CMDBringToBack(s, model));
+	public void bringToBack() {
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext()) {
+			Shape s = it.next();
+					
+			if(s.isSelected())
+			{
+				s.setSelected(false);
+				cmdBringToBack = new CmdBringToBack(model, s);
+					
+				try {
+					cmdBringToBack.execute();
+					frame.addToLog(cmdBringToBack.toString());
+				} 				//ako nema sa cim da se zameni
+				catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Element is already on the back");		
+					s.setSelected(false);
+				}
+				
 				break;
-			}
+			}	
 		}
+		frame.getBtnSelect().setSelected(false);
 	}
 
 	public void bringToFront() {
-		for (Shape s : model.getAll()) {
-			if (s.isSelected()) {
-				executeCommands(new CMDBringToFront(s, model));
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext()) {
+			Shape s = it.next();
+					
+			if(s.isSelected())
+			{
+				s.setSelected(false);
+				cmdBringToFront = new CmdBringToFront(model, s);
+					
+				try {
+					cmdBringToFront.execute();
+					frame.addToLog(cmdBringToFront.toString());
+				} 				//ako nema sa cim da se zameni
+				catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Element is already on the front");		
+					s.setSelected(false);
+				}
+				
 				break;
-			}
+			}	
 		}
-	}*/
+		frame.getBtnSelect().setSelected(false);
+	}
 	
 }
 

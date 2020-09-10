@@ -16,7 +16,6 @@ public class CmdSelect implements Command {
 	@Override
 	public void execute() {
 		shape.setSelected(true);
-		System.out.println(this.toString());
 	}
 
 	@Override

@@ -17,7 +17,6 @@ public class CmdAddShape implements Command {
 	@Override
 	public void execute() {
 		model.add(shape);
-		System.out.println(this.toString());
 	}
 
 	@Override
