@@ -8,8 +8,6 @@ public abstract class SurfaceShape extends Shape {
 	private String insideColorString;
 	private Color insideColor;
 	
-	public abstract double area();
-	public abstract double perimeter();
 	public abstract void fill(Graphics g);
 	
 	//radi sa stringovima

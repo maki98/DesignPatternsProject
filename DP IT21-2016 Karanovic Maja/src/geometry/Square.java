@@ -53,12 +53,10 @@ public class Square extends SurfaceShape {
 			return 0;
 	}
 
-	@Override
 	public double area() {
 		return pageLength * pageLength;
 	}
 
-	@Override
 	public double perimeter() {
 		return pageLength * 4;
 	}

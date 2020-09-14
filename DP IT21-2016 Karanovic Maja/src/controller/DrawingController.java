@@ -10,6 +10,7 @@ import javax.sound.sampled.ReverbType;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
+import adapter.HexagonAdapter;
 import command.CmdAddShape;
 import command.CmdBringToBack;
 import command.CmdBringToFront;
@@ -27,6 +28,7 @@ import geometry.Point;
 import geometry.Rectangle;
 import geometry.Shape;
 import geometry.Square;
+import hexagon.Hexagon;
 import observer.DrawingObserver;
 import view.DrawingFrame;
 
@@ -139,6 +141,20 @@ public class DrawingController {
 	}
 	
 	
+	public void addHexagon(MouseEvent arg0)
+	{
+		Hexagon h = new Hexagon(arg0.getX(), arg0.getY(), 100);
+		HexagonAdapter ha = new HexagonAdapter(h);
+		ha.setColor(contourColor);
+		ha.setInsideColor(insideColor);
+		
+		cmdAddShape = new CmdAddShape(model, ha);
+		cmdAddShape.execute();
+		frame.getView().repaint();
+		
+		ha.addObserver(new DrawingObserver(model, frame));
+	}
+
 	public void chooseContourColor()
 	{
 		Color temp = JColorChooser.showDialog(null, "Choose contour color:", contourColor);
@@ -216,6 +232,7 @@ public class DrawingController {
 			}
 
 		}
+		frame.getBtnDelete().setSelected(false);
 		
 	}
 	

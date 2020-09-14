@@ -313,6 +313,10 @@ public class DrawingFrame extends JFrame {
 				{
 					controller.addRectangle(arg0);
 				}
+				else if(btnHexagon.isSelected()) 
+				{
+					controller.addHexagon(arg0);
+				}
 				else if(btnCircle.isSelected())
 				{
 					controller.addCircle(arg0);

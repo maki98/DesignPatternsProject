@@ -50,7 +50,7 @@ public class Circle extends SurfaceShape {
 		else 
 			return 0;
 	}
-	@Override
+	
 	public double area() {
 		return radius*radius*Math.PI;
 		
@@ -61,7 +61,6 @@ public class Circle extends SurfaceShape {
 		return "circle->center:" + center + ",radius:" + radius + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
 	}
 	
-	@Override
 	public double perimeter() {
 		return 2*radius*Math.PI;
 	}
