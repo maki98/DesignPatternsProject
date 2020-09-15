@@ -3,22 +3,21 @@ package dialogs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.border.EmptyBorder;
 
-public class DlgForCircle extends JDialog {
+public class DlgForHexagon extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -37,7 +36,7 @@ public class DlgForCircle extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DlgForCircle dialog = new DlgForCircle();
+			DlgForHexagon dialog = new DlgForHexagon();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,8 +47,8 @@ public class DlgForCircle extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DlgForCircle() {
-		setTitle("Circle");
+	public DlgForHexagon() {
+		setTitle("Hexagon");
 		setModal(true);
 		setBounds(100, 100, 485, 217);
 		getContentPane().setLayout(new BorderLayout());

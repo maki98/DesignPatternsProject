@@ -19,6 +19,7 @@ import command.CmdSelect;
 import command.CmdToBack;
 import command.CmdToFront;
 import dialogs.DlgForCircle;
+import dialogs.DlgForHexagon;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
 import geometry.Circle;
@@ -143,16 +144,23 @@ public class DrawingController {
 	
 	public void addHexagon(MouseEvent arg0)
 	{
-		Hexagon h = new Hexagon(arg0.getX(), arg0.getY(), 100);
-		HexagonAdapter ha = new HexagonAdapter(h);
-		ha.setColor(contourColor);
-		ha.setInsideColor(insideColor);
+		DlgForHexagon dialog = new DlgForHexagon();
+		dialog.informationGot(arg0.getX(), arg0.getY(), contourColor, insideColor);
+		dialog.setVisible(true);
+		if(dialog.getFinished() == 1)
+		{
+			Hexagon h = new Hexagon(dialog.getX(), dialog.getY(), dialog.getRadius());
+			h.setBorderColor(contourColor);
+			h.setAreaColor(insideColor);
+			HexagonAdapter ha = new HexagonAdapter(h);
+			cmdAddShape = new CmdAddShape(model, ha);
+			cmdAddShape.execute();
+			frame.getView().repaint();
+			frame.addToLog(cmdAddShape.toString());
+			
+			ha.addObserver(new DrawingObserver(model, frame));
+		}
 		
-		cmdAddShape = new CmdAddShape(model, ha);
-		cmdAddShape.execute();
-		frame.getView().repaint();
-		
-		ha.addObserver(new DrawingObserver(model, frame));
 	}
 
 	public void chooseContourColor()

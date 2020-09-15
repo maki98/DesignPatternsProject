@@ -61,17 +61,18 @@ public class HexagonAdapter extends SurfaceShape {
 	@Override
 	public void drawShape(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(this.getColor());
 		hexagon.paint(g);
-		fill(g);
-		if(isSelected())
-			selected(g);		
-		
 	}
 
 	@Override
 	public void selected(Graphics g) {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void setSelected(boolean selected) {
+		hexagon.setSelected(selected);
+		super.setSelected(selected);
 	}
 
 	@Override
@@ -91,6 +92,11 @@ public class HexagonAdapter extends SurfaceShape {
 		}
 		else
 			return false;
+	}
+	
+	public String toString() 
+	{
+		return "hexagon->center:" + new Point(this.getX(), this.getY()) + ",radius:" + this.getR() + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
 	}
 
 	public int getR() {
