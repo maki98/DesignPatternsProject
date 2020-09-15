@@ -19,6 +19,7 @@ import command.movingz.CmdBringToFront;
 import command.movingz.CmdToBack;
 import command.movingz.CmdToFront;
 import command.update.CmdUpdateCircle;
+import command.update.CmdUpdateRectangle;
 import command.update.CmdUpdateSquare;
 import dialogs.DlgForCircle;
 import dialogs.DlgForHexagon;
@@ -50,6 +51,7 @@ public class DrawingController {
 	private CmdBringToFront cmdBringToFront;
 	private CmdUpdateCircle cmdUpdateCircle;
 	private CmdUpdateSquare cmdUpdateSquare;
+	private CmdUpdateRectangle cmdUpdateRectangle;
 
 	
 	private Color contourColor = Color.BLACK;
@@ -374,6 +376,25 @@ public class DrawingController {
 						frame.addToLog(cmdUpdateCircle.toString());
 					}
 				}
+				else if(s instanceof Rectangle) {
+					DlgForRectangle dialog = new DlgForRectangle();
+					Rectangle old = (Rectangle) s;
+					Rectangle newc = (Rectangle) s;
+					dialog.update(newc.getUpperLeft().getX(), newc.getUpperLeft().getY(), newc.getPageLength(), newc.getHeight(), newc.getColor(), newc.getInsideColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						newc.getUpperLeft().setX(dialog.getX());
+						newc.getUpperLeft().setY(dialog.getY());
+						newc.setPageLength(dialog.getLength());
+						newc.setHeight(dialog.getMyHeight());
+						newc.setColor(dialog.getContour());
+						newc.setInsideColor(dialog.getInside());
+						
+						cmdUpdateRectangle = new CmdUpdateRectangle(old, newc);
+						cmdUpdateRectangle.execute();
+						frame.addToLog(cmdUpdateRectangle.toString());
+					}
+				}
 				else if(s instanceof Square) {
 					DlgForSquare dialog = new DlgForSquare();
 					Square old = (Square) s;
@@ -392,6 +413,7 @@ public class DrawingController {
 						frame.addToLog(cmdUpdateSquare.toString());
 					}
 				}
+
 			}	
 		}
 		frame.getBtnSelect().setSelected(false);

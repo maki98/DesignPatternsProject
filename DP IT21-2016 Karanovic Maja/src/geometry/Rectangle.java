@@ -102,6 +102,13 @@ public class Rectangle extends Square implements Moveable {
 				&& y <= (upperLeft.getY() + height);
 	}
 	
+	@Override 
+	public Shape clone() {
+		Rectangle rectangle = new Rectangle(new Point(this.getUpperLeft().getX(), this.getUpperLeft().getY()), this.getPageLength(), this.getHeight(), this.getColor(), this.getInsideColor());
+		return rectangle;
+	}
+	
+	
 	public int getHeight()
 	{
 		return height;
