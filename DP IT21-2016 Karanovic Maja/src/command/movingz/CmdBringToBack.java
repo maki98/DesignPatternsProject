@@ -1,7 +1,8 @@
-package command;
+package command.movingz;
 
 import javax.swing.JOptionPane;
 
+import command.Command;
 import geometry.DrawingModel;
 import geometry.Shape;
 
@@ -43,7 +44,7 @@ public class CmdBringToBack implements Command {
 
 	@Override
 	public String toString() {
-		return "bringtoback->" + shape.toString();
+		return "bringtoback:" + shape.toString();
 	}
 
 }

@@ -12,12 +12,14 @@ import javax.swing.JOptionPane;
 
 import adapter.HexagonAdapter;
 import command.CmdAddShape;
-import command.CmdBringToBack;
-import command.CmdBringToFront;
 import command.CmdRemoveShape;
 import command.CmdSelect;
-import command.CmdToBack;
-import command.CmdToFront;
+import command.movingz.CmdBringToBack;
+import command.movingz.CmdBringToFront;
+import command.movingz.CmdToBack;
+import command.movingz.CmdToFront;
+import command.update.CmdUpdateCircle;
+import command.update.CmdUpdateSquare;
 import dialogs.DlgForCircle;
 import dialogs.DlgForHexagon;
 import dialogs.DlgForRectangle;
@@ -46,6 +48,9 @@ public class DrawingController {
 	private CmdToFront cmdToFront;
 	private CmdBringToBack cmdBringToBack;
 	private CmdBringToFront cmdBringToFront;
+	private CmdUpdateCircle cmdUpdateCircle;
+	private CmdUpdateSquare cmdUpdateSquare;
+
 	
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
@@ -336,6 +341,57 @@ public class DrawingController {
 				}
 				
 				break;
+			}	
+		}
+		frame.getBtnSelect().setSelected(false);
+	}
+
+	public void updateShape(MouseEvent e) {
+		
+		Iterator<Shape> it = model.getAll().iterator();
+		while(it.hasNext()) {
+			Shape s = it.next();
+					
+			if(s.isSelected())
+			{
+				s.setSelected(false);
+
+				if(s instanceof Circle) {
+					DlgForCircle dialog = new DlgForCircle();
+					Circle old = (Circle) s;
+					Circle newc = (Circle) s;
+					dialog.update(newc.getCenter().getX(), newc.getCenter().getY(), newc.getRadius(), newc.getColor(), newc.getInsideColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						newc.getCenter().setX(dialog.getX());
+						newc.getCenter().setY(dialog.getY());
+						newc.setRadius(dialog.getRadius());
+						newc.setColor(dialog.getContour());
+						newc.setInsideColor(dialog.getInside());
+						
+						cmdUpdateCircle = new CmdUpdateCircle(old, newc);
+						cmdUpdateCircle.execute();
+						frame.addToLog(cmdUpdateCircle.toString());
+					}
+				}
+				else if(s instanceof Square) {
+					DlgForSquare dialog = new DlgForSquare();
+					Square old = (Square) s;
+					Square newc = (Square) s;
+					dialog.update(newc.getUpperLeft().getX(), newc.getUpperLeft().getY(), newc.getPageLength(), newc.getColor(), newc.getInsideColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						newc.getUpperLeft().setX(dialog.getX());
+						newc.getUpperLeft().setY(dialog.getY());
+						newc.setPageLength(dialog.getLength());
+						newc.setColor(dialog.getContour());
+						newc.setInsideColor(dialog.getInside());
+						
+						cmdUpdateSquare = new CmdUpdateSquare(old, newc);
+						cmdUpdateSquare.execute();
+						frame.addToLog(cmdUpdateSquare.toString());
+					}
+				}
 			}	
 		}
 		frame.getBtnSelect().setSelected(false);

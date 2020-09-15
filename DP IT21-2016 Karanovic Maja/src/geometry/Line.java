@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Line extends Shape {
+public class Line extends Shape implements Moveable {
 
 	private Point first;
 	private Point last;

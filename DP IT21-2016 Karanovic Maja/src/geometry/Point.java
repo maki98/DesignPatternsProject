@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Point extends Shape {
+public class Point extends Shape implements Moveable {
 
 	private int x;
 	private int y;

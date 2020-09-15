@@ -1,9 +1,10 @@
-package command;
+package command.movingz;
 
 import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
+import command.Command;
 import geometry.DrawingModel;
 import geometry.Shape;
 
@@ -45,7 +46,7 @@ public class CmdBringToFront implements Command {
 
 	@Override
 	public String toString() {
-		return "bringtofront->" + shape.toString();
+		return "bringtofront:" + shape.toString();
 	}
 
 }

@@ -4,12 +4,13 @@ import java.awt.Graphics;
 
 import geometry.Circle;
 import geometry.Line;
+import geometry.Moveable;
 import geometry.Point;
 import geometry.Square;
 import geometry.SurfaceShape;
 import hexagon.Hexagon;
 
-public class HexagonAdapter extends SurfaceShape {
+public class HexagonAdapter extends SurfaceShape implements Moveable {
 	
 	private Hexagon hexagon;
 	

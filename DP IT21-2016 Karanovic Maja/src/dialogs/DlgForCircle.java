@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -110,6 +111,16 @@ public class DlgForCircle extends JDialog {
 		}
 		{
 			btnContourColor = new JButton("");
+			btnContourColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color temp = JColorChooser.showDialog(null, "Choose contour color:", contour);
+					if(temp != null)
+					{
+						contour = temp;
+						btnContourColor.setBackground(contour);
+					}				
+				}
+			});
 			GridBagConstraints gbc_btnContourColor = new GridBagConstraints();
 			gbc_btnContourColor.fill = GridBagConstraints.BOTH;
 			gbc_btnContourColor.insets = new Insets(0, 0, 5, 5);
@@ -147,6 +158,16 @@ public class DlgForCircle extends JDialog {
 		}
 		{
 			btnInsideColor = new JButton("");
+			btnInsideColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color temp = JColorChooser.showDialog(null, "Choose inside color:", inside);
+					if(temp != null)
+					{
+						inside = temp;
+						btnInsideColor.setBackground(inside);
+					}				
+				}
+			});
 			GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
 			gbc_btnInsideColor.insets = new Insets(0, 0, 5, 5);
 			gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
@@ -196,6 +217,21 @@ public class DlgForCircle extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	public void update(int x, int y, int radius, Color contour, Color inside)
+	{
+		setX(x);
+		setY(y);
+		setRadius(radius);
+		setContour(contour);
+		setInside(inside);
+		
+		txtXCoordinate.setText(Integer.toString(x));
+		txtYCoordinate.setText(Integer.toString(y));
+		txtRadius.setText(Integer.toString(radius));
+		btnContourColor.setBackground(contour);
+		btnInsideColor.setBackground(inside);
 	}
 	
 	public void informationGot(int x, int y, Color contour, Color inside)

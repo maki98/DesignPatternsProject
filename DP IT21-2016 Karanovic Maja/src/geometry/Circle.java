@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Circle extends SurfaceShape {
+public class Circle extends SurfaceShape implements Moveable {
 	
 	private Point center;
 	private int radius;
@@ -110,15 +110,25 @@ public class Circle extends SurfaceShape {
 		else
 			return false;
 	}
+	
+	@Override
+	public Shape clone() {
+		Circle circle = new Circle(new Point(this.getCenter().getX(), this.getCenter().getY()), this.getRadius(), this.getColor(), this.getInsideColor());
+		return circle;
+	}
+	
 	public Point getCenter() {
 		return center;
 	}
+	
 	public void setCenter(Point center) {
 		this.center = center;
 	}
+	
 	public int getRadius() {
 		return radius;
 	}
+	
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}

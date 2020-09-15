@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -112,13 +113,19 @@ public class DlgForSquare extends JDialog {
 		{
 			btnContourColor = new JButton("");
 			btnContourColor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
+					Color temp = JColorChooser.showDialog(null, "Choose contour color:", contour);
+					if(temp != null)
+					{
+						contour = temp;
+						btnContourColor.setBackground(contour);
+					}				
 				}
 			});
 			GridBagConstraints gbc_btnContourColor = new GridBagConstraints();
 			gbc_btnContourColor.fill = GridBagConstraints.BOTH;
 			gbc_btnContourColor.insets = new Insets(0, 0, 5, 5);
-			gbc_btnContourColor.gridx = 4;
+			gbc_btnContourColor.gridx = 5;
 			gbc_btnContourColor.gridy = 2;
 			contentPanel.add(btnContourColor, gbc_btnContourColor);
 		}
@@ -154,12 +161,18 @@ public class DlgForSquare extends JDialog {
 			btnInsideColor = new JButton("");
 			btnInsideColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Color temp = JColorChooser.showDialog(null, "Choose inside color:", inside);
+					if(temp != null)
+					{
+						inside = temp;
+						btnInsideColor.setBackground(inside);
+					}				
 				}
 			});
 			GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
 			gbc_btnInsideColor.insets = new Insets(0, 0, 5, 5);
 			gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
-			gbc_btnInsideColor.gridx = 4;
+			gbc_btnInsideColor.gridx = 5;
 			gbc_btnInsideColor.gridy = 3;
 			contentPanel.add(btnInsideColor, gbc_btnInsideColor);
 		}
@@ -208,6 +221,21 @@ public class DlgForSquare extends JDialog {
 
 	}
 	
+	public void update(int x, int y, int length, Color contour, Color inside) 
+	{
+		setX(x);
+		setY(y);
+		setLength(length);
+		setContour(contour);
+		setInside(inside);
+		
+		txtXCoordinate.setText(Integer.toString(x));
+		txtYCoordinate.setText(Integer.toString(y));
+		txtLength.setText(Integer.toString(length));
+		btnContourColor.setBackground(contour);
+		btnInsideColor.setBackground(inside);
+	}
+	
 	public void informationGot(int x, int y, Color contour, Color inside)
 	{
 		setX(x);
@@ -219,7 +247,6 @@ public class DlgForSquare extends JDialog {
 		txtYCoordinate.setText(Integer.toString(y));
 		btnContourColor.setBackground(contour);
 		btnInsideColor.setBackground(inside);
-		System.out.println("ovde sam");
 		
 		txtXCoordinate.setEditable(false);
 		txtYCoordinate.setEditable(false);

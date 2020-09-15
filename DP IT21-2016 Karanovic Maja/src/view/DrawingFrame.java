@@ -172,6 +172,12 @@ public class DrawingFrame extends JFrame {
 		pnlShapes.add(btnSelect, "cell 0 8,growx");
 
 		btnModify = new JToggleButton("Modify");
+		btnModify.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				controller.updateShape(e);
+			}
+		});	
 		pnlShapes.add(btnModify, "cell 0 9,growx");
 		btnModify.setEnabled(false);
 		
@@ -272,9 +278,6 @@ public class DrawingFrame extends JFrame {
 			}
 		});
 		pnlShapes.add(btnInsideColor, "cell 1 6,grow");
-		
-
-		
 
 		
 	

@@ -3,7 +3,7 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Square extends SurfaceShape {
+public class Square extends SurfaceShape implements Moveable {
 	
 	protected Point upperLeft;
 	protected int pageLength;
@@ -122,6 +122,12 @@ public class Square extends SurfaceShape {
 		}
 		else
 			return false;
+	}
+	
+	@Override
+	public Shape clone() {
+		Square square = new Square(new Point(this.getUpperLeft().getX(), this.getUpperLeft().getY()), this.getPageLength(), this.getColor(), this.getInsideColor());
+		return square;
 	}
 
 	public Point getUpperLeft() {

@@ -25,7 +25,7 @@ public class CmdSelect implements Command {
 	
 	@Override
 	public String toString() {
-		return "select->" + shape.toString();
+		return "select:" + shape.toString();
 	}
 	
 }

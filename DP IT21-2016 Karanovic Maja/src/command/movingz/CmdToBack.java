@@ -1,7 +1,8 @@
-package command;
+package command.movingz;
 
 import java.util.Collections;
 
+import command.Command;
 import geometry.DrawingModel;
 import geometry.Shape;
 
@@ -30,7 +31,7 @@ public class CmdToBack implements Command {
 	}
 
 	public String toString() {
-		return "toback->" + shape.toString();
+		return "toback:" + shape.toString();
 	}
 
 }

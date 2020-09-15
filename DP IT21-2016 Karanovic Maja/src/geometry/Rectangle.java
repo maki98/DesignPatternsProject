@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import geometry.Line;
 import geometry.Point;
 
-public class Rectangle extends Square {
+public class Rectangle extends Square implements Moveable {
 
 	private int height;
 	
