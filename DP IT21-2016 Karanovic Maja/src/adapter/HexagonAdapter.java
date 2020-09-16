@@ -6,6 +6,7 @@ import geometry.Circle;
 import geometry.Line;
 import geometry.Moveable;
 import geometry.Point;
+import geometry.Shape;
 import geometry.Square;
 import geometry.SurfaceShape;
 import hexagon.Hexagon;
@@ -20,6 +21,14 @@ public class HexagonAdapter extends SurfaceShape implements Moveable {
 	
 	public HexagonAdapter (Hexagon hexagon) {
 		this.hexagon = hexagon;
+	}
+	
+	public HexagonAdapter (int x, int y, int r, Color contour, Color inside) {
+		this.setX(x);
+		this.setY(y);
+		this.setR(r);
+		this.setColor(contour);
+		this.setInsideColor(inside);
 	}
 	
 	public HexagonAdapter (Hexagon hexagon, Color contour, Color inside) {
@@ -97,7 +106,18 @@ public class HexagonAdapter extends SurfaceShape implements Moveable {
 	
 	public String toString() 
 	{
-		return "hexagon->center:" + new Point(this.getX(), this.getY()) + ",radius:" + this.getR() + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
+		return "hexagon->center:" + new Point(this.getX(), this.getY()) + ",radius:" + this.getR();
+	}
+	
+	@Override
+	public HexagonAdapter clone() {
+		Hexagon hexagon = new Hexagon(this.getX(), this.getY(), this.getR());
+		
+		HexagonAdapter ha = new HexagonAdapter(hexagon);
+		ha.setColor(this.getColor());
+		ha.setInsideColor(this.getInsideColor());
+		
+		return ha;
 	}
 
 	public int getR() {

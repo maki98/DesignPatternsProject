@@ -95,6 +95,12 @@ public class Line extends Shape implements Moveable {
 		Point midPoint = new Point(xMid, yMid);
 		return midPoint;
 	}
+	
+	@Override 
+	public Shape clone() {
+		Line line = new Line(new Point(this.getFirst().getX(), this.getFirst().getY()), new Point(this.getLast().getX(), this.getLast().getY()), this.getColor());
+		return line;
+	}
 
 	public Point getFirst() {
 		return first;

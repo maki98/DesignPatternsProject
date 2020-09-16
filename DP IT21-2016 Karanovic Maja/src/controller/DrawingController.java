@@ -19,10 +19,15 @@ import command.movingz.CmdBringToFront;
 import command.movingz.CmdToBack;
 import command.movingz.CmdToFront;
 import command.update.CmdUpdateCircle;
+import command.update.CmdUpdateHexagon;
+import command.update.CmdUpdateLine;
+import command.update.CmdUpdatePoint;
 import command.update.CmdUpdateRectangle;
 import command.update.CmdUpdateSquare;
 import dialogs.DlgForCircle;
 import dialogs.DlgForHexagon;
+import dialogs.DlgForLine;
+import dialogs.DlgForPoint;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
 import geometry.Circle;
@@ -52,7 +57,9 @@ public class DrawingController {
 	private CmdUpdateCircle cmdUpdateCircle;
 	private CmdUpdateSquare cmdUpdateSquare;
 	private CmdUpdateRectangle cmdUpdateRectangle;
-
+	private CmdUpdateHexagon cmdUpdateHexagon;
+	private CmdUpdatePoint cmdUpdatePoint;
+	private CmdUpdateLine cmdUpdateLine;
 	
 	private Color contourColor = Color.BLACK;
 	private Color insideColor = Color.WHITE;
@@ -160,11 +167,13 @@ public class DrawingController {
 			h.setBorderColor(contourColor);
 			h.setAreaColor(insideColor);
 			HexagonAdapter ha = new HexagonAdapter(h);
+			ha.setColor(h.getBorderColor());
+			ha.setInsideColor(h.getAreaColor());
 			cmdAddShape = new CmdAddShape(model, ha);
 			cmdAddShape.execute();
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
-			
+						
 			ha.addObserver(new DrawingObserver(model, frame));
 		}
 		
@@ -411,6 +420,60 @@ public class DrawingController {
 						cmdUpdateSquare = new CmdUpdateSquare(old, newc);
 						cmdUpdateSquare.execute();
 						frame.addToLog(cmdUpdateSquare.toString());
+					}
+				}
+				else if(s instanceof HexagonAdapter) {
+					DlgForHexagon dialog = new DlgForHexagon();
+					HexagonAdapter old = (HexagonAdapter) s;
+					dialog.update(old.getX(), old.getY(), old.getR(), old.getColor(), old.getInsideColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						
+						Hexagon newh = new Hexagon(dialog.getX(), dialog.getY(), dialog.getRadius());
+						newh.setBorderColor(dialog.getContour());
+						newh.setAreaColor(dialog.getInside());
+						
+						HexagonAdapter newc = new HexagonAdapter(newh);
+						newc.setColor(dialog.getContour());
+						newc.setInsideColor(dialog.getInside());
+												
+						cmdUpdateHexagon = new CmdUpdateHexagon(old, newc);
+						cmdUpdateHexagon.execute();
+						frame.addToLog(cmdUpdateHexagon.toString());
+					}
+				}
+				else if(s instanceof Point) {
+					DlgForPoint dialog = new DlgForPoint();
+					Point old = (Point) s;
+					Point newc = (Point) s;
+					dialog.update(newc.getX(), newc.getY(), newc.getColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						newc.setX(dialog.getX());
+						newc.setY(dialog.getY());
+						newc.setColor(dialog.getContour());
+						
+						cmdUpdatePoint = new CmdUpdatePoint(old, newc);
+						cmdUpdatePoint.execute();
+						frame.addToLog(cmdUpdatePoint.toString());
+					}
+				}
+				else if(s instanceof Line) {
+					DlgForLine dialog = new DlgForLine();
+					Line old = (Line) s;
+					Line newc = (Line) s;
+					dialog.update(newc.getFirst().getX(), newc.getFirst().getY(), newc.getLast().getX(), newc.getLast().getY(), newc.getColor());
+					dialog.setVisible(true);
+					if(dialog.getFinished() == 1) {
+						newc.getFirst().setX(dialog.getxStart());
+						newc.getFirst().setY(dialog.getyStart());
+						newc.getLast().setX(dialog.getxEnd());
+						newc.getLast().setY(dialog.getyEnd());
+						newc.setColor(dialog.getContour());
+						
+						cmdUpdateLine = new CmdUpdateLine(old, newc);
+						cmdUpdateLine.execute();
+						frame.addToLog(cmdUpdateLine.toString());
 					}
 				}
 

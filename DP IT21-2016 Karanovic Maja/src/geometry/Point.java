@@ -92,6 +92,12 @@ public class Point extends Shape implements Moveable {
 	{
 		return "point->(" + x + ", " + y + ", " +  this.getColorString() + ")";
 	}
+	
+	@Override 
+	public Shape clone() {
+		Point point = new Point(this.getX(), this.getY(), this.getColor());
+		return point;
+	}
 
 	public int getX() 
 	{
