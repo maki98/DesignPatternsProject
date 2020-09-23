@@ -58,7 +58,7 @@ public class Circle extends SurfaceShape implements Moveable {
 	
 	public String toString() 
 	{
-		return "circle->center:" + center + ",radius:" + radius + ",contourColor:" + findColorString(getColor()) + ",insideColor:" + findColorString(getInsideColor());
+		return "circle->center:" + center.toStringWithoutColor() + ",radius:" + radius + ",contourColor:" + colorToRgb(getColor()) + ",insideColor:" + colorToRgb(getInsideColor());
 	}
 	
 	public double perimeter() {

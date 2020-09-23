@@ -90,7 +90,12 @@ public class Point extends Shape implements Moveable {
 	
 	public String toString()
 	{
-		return "point->(" + x + ", " + y + ", " +  this.getColorString() + ")";
+		return "point->(x:" + x + ",y:" + y + ",color:" +  this.colorToRgb(getColor()) + ")";
+	}
+	
+	public String toStringWithoutColor()
+	{
+		return "point->(x:" + x + ",y:" + y + ")";
 	}
 	
 	@Override 

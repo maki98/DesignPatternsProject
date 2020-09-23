@@ -56,6 +56,11 @@ public abstract class Shape extends Observable implements Moveable, Comparable<O
 			return "Black";
 	}
 	
+	public String colorToRgb(Color color) {
+		
+		return "[" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "]";		
+	}
+	
 	public abstract void drawShape(Graphics g);
 	public abstract void selected(Graphics g);
 	public abstract boolean contains(int x, int y);

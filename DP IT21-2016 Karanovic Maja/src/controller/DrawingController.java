@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Stack;
 
 import javax.sound.sampled.ReverbType;
 import javax.swing.JColorChooser;
@@ -14,6 +15,7 @@ import adapter.HexagonAdapter;
 import command.CmdAddShape;
 import command.CmdRemoveShape;
 import command.CmdSelect;
+import command.Command;
 import command.movingz.CmdBringToBack;
 import command.movingz.CmdBringToFront;
 import command.movingz.CmdToBack;
@@ -65,6 +67,11 @@ public class DrawingController {
 	private Color insideColor = Color.WHITE;
 	
 	private ArrayList<Shape> selected = new ArrayList<Shape>();
+	
+	private Stack<Command> redoStack = new Stack<Command>();
+	private Stack<Command> undoStack = new Stack<Command>();
+
+	private ArrayList<Command> listOfCommands = new ArrayList<Command>();
 		
 	public DrawingController(DrawingModel model, DrawingFrame frame)
 	{
@@ -77,7 +84,7 @@ public class DrawingController {
 		
 		Point p = new Point(arg0.getX(), arg0.getY(), contourColor);
 		cmdAddShape = new CmdAddShape(model, p);
-		cmdAddShape.execute();
+		executeCmd(cmdAddShape);
 		frame.getView().repaint();
 		frame.addToLog(cmdAddShape.toString());
 		p.addObserver(new DrawingObserver(model, frame));
@@ -94,7 +101,7 @@ public class DrawingController {
 			Point secondPointOfLine = new Point(arg0.getX(), arg0.getY());
 			Line l = new Line(firstPointOfLine, secondPointOfLine, contourColor);
 			cmdAddShape = new CmdAddShape(model, l);
-			cmdAddShape.execute();
+			executeCmd(cmdAddShape);
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
 			firstPointOfLine = null;
@@ -112,7 +119,7 @@ public class DrawingController {
 		{
 			Square s = new Square(new Point(dialog.getX(), dialog.getY()), dialog.getLength(), dialog.getContour(), dialog.getInside());
 			cmdAddShape = new CmdAddShape(model, s);
-			cmdAddShape.execute();
+			executeCmd(cmdAddShape);
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
 			
@@ -129,7 +136,7 @@ public class DrawingController {
 		{
 			Rectangle r = new Rectangle(new Point(dialog.getX(), dialog.getY()), dialog.getLength(), dialog.getMyHeight(), dialog.getContour(), dialog.getInside());
 			cmdAddShape = new CmdAddShape(model, r);
-			cmdAddShape.execute();
+			executeCmd(cmdAddShape);
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
 			
@@ -146,7 +153,7 @@ public class DrawingController {
 		{
 			Circle c = new Circle(new Point(dialog.getX(), dialog.getY()), dialog.getRadius(), dialog.getContour(), dialog.getInside());
 			cmdAddShape = new CmdAddShape(model, c);
-			cmdAddShape.execute();
+			executeCmd(cmdAddShape);
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
 			
@@ -170,7 +177,7 @@ public class DrawingController {
 			ha.setColor(h.getBorderColor());
 			ha.setInsideColor(h.getAreaColor());
 			cmdAddShape = new CmdAddShape(model, ha);
-			cmdAddShape.execute();
+			executeCmd(cmdAddShape);
 			frame.getView().repaint();
 			frame.addToLog(cmdAddShape.toString());
 						
@@ -207,17 +214,15 @@ public class DrawingController {
 				if(model.get(i).isSelected() == false)
 				{
 					CmdSelect cmdSelect = new CmdSelect(model.get(i));
-					cmdSelect.execute();
+					executeCmd(cmdSelect);
 					frame.addToLog(cmdSelect.toString());
 
-					//model.get(i).setSelected(true);
 					break;
 				}
 				else if (model.get(i).isSelected() == true)
 				{
 					CmdSelect cmdSelect = new CmdSelect(model.get(i));
 					cmdSelect.unexecute();
-					//model.get(i).setSelected(false);
 					break;
 				}
 			}
@@ -248,7 +253,7 @@ public class DrawingController {
 						cmdRemoveShape = new CmdRemoveShape(model, s);
 						it.remove();
 	
-						cmdRemoveShape.execute();
+						executeCmd(cmdRemoveShape);
 						frame.addToLog(cmdRemoveShape.toString());
 					}	
 				}
@@ -271,7 +276,7 @@ public class DrawingController {
 				cmdToBack = new CmdToBack(model, s);
 	
 				try {
-					cmdToBack.execute();
+					executeCmd(cmdToBack);
 					frame.addToLog(cmdToBack.toString());
 				}				//ako nema sa cim da se zameni
 				catch (Exception e) {
@@ -295,7 +300,7 @@ public class DrawingController {
 				cmdToFront = new CmdToFront(model, s);
 	
 				try {
-					cmdToFront.execute();
+					executeCmd(cmdToFront);
 					frame.addToLog(cmdToFront.toString());
 				}				//ako nema sa cim da se zameni
 				catch (Exception e) {
@@ -318,7 +323,7 @@ public class DrawingController {
 				cmdBringToBack = new CmdBringToBack(model, s);
 					
 				try {
-					cmdBringToBack.execute();
+					executeCmd(cmdBringToBack);
 					frame.addToLog(cmdBringToBack.toString());
 				} 				//ako nema sa cim da se zameni
 				catch (Exception e) {
@@ -343,7 +348,7 @@ public class DrawingController {
 				cmdBringToFront = new CmdBringToFront(model, s);
 					
 				try {
-					cmdBringToFront.execute();
+					executeCmd(cmdBringToFront);
 					frame.addToLog(cmdBringToFront.toString());
 				} 				//ako nema sa cim da se zameni
 				catch (Exception e) {
@@ -381,7 +386,7 @@ public class DrawingController {
 						newc.setInsideColor(dialog.getInside());
 						
 						cmdUpdateCircle = new CmdUpdateCircle(old, newc);
-						cmdUpdateCircle.execute();
+						executeCmd(cmdUpdateCircle);
 						frame.addToLog(cmdUpdateCircle.toString());
 					}
 				}
@@ -400,7 +405,7 @@ public class DrawingController {
 						newc.setInsideColor(dialog.getInside());
 						
 						cmdUpdateRectangle = new CmdUpdateRectangle(old, newc);
-						cmdUpdateRectangle.execute();
+						executeCmd(cmdUpdateRectangle);
 						frame.addToLog(cmdUpdateRectangle.toString());
 					}
 				}
@@ -418,7 +423,7 @@ public class DrawingController {
 						newc.setInsideColor(dialog.getInside());
 						
 						cmdUpdateSquare = new CmdUpdateSquare(old, newc);
-						cmdUpdateSquare.execute();
+						executeCmd(cmdUpdateSquare);
 						frame.addToLog(cmdUpdateSquare.toString());
 					}
 				}
@@ -438,7 +443,7 @@ public class DrawingController {
 						newc.setInsideColor(dialog.getInside());
 												
 						cmdUpdateHexagon = new CmdUpdateHexagon(old, newc);
-						cmdUpdateHexagon.execute();
+						executeCmd(cmdUpdateHexagon);
 						frame.addToLog(cmdUpdateHexagon.toString());
 					}
 				}
@@ -454,7 +459,7 @@ public class DrawingController {
 						newc.setColor(dialog.getContour());
 						
 						cmdUpdatePoint = new CmdUpdatePoint(old, newc);
-						cmdUpdatePoint.execute();
+						executeCmd(cmdUpdatePoint);
 						frame.addToLog(cmdUpdatePoint.toString());
 					}
 				}
@@ -472,7 +477,7 @@ public class DrawingController {
 						newc.setColor(dialog.getContour());
 						
 						cmdUpdateLine = new CmdUpdateLine(old, newc);
-						cmdUpdateLine.execute();
+						executeCmd(cmdUpdateLine);
 						frame.addToLog(cmdUpdateLine.toString());
 					}
 				}
@@ -481,6 +486,50 @@ public class DrawingController {
 		}
 		frame.getBtnSelect().setSelected(false);
 	}
+	
+	public void executeCmd(Command c) {
+		c.execute();
+		
+		undoStack.push(c);
+		redoStack.clear();
+		
+        System.out.println("Size of Undo Stack : " + undoStack.size());
+        System.out.println("Size of Redo Stack : " + redoStack.size());
+
+		
+		frame.getBtnUndo().setEnabled(true);
+		frame.getBtnRedo().setEnabled(false);
+	}
+	
+	public void undo() {
+
+		frame.getBtnRedo().setEnabled(true);
+				
+		redoStack.push(undoStack.peek());
+		undoStack.peek().unexecute();
+		undoStack.pop();
+		
+        System.out.println("Size of Undo Stack : " + undoStack.size());
+        System.out.println("Size of Redo Stack : " + redoStack.size());
+		
+		if(undoStack.isEmpty())
+			frame.getBtnUndo().setEnabled(false);
+	}
+	
+	public void redo() {
+		
+		frame.getBtnUndo().setEnabled(true);
+		undoStack.push(redoStack.peek());
+		redoStack.peek().execute();
+		redoStack.pop();
+		
+        System.out.println("Size of Undo Stack : " + undoStack.size());
+        System.out.println("Size of Redo Stack : " + redoStack.size());
+		
+		if(redoStack.isEmpty())
+			frame.getBtnRedo().setEnabled(false);
+	}
+
 	
 }
 

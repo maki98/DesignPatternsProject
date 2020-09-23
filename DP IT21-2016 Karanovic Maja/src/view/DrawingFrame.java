@@ -66,6 +66,8 @@ public class DrawingFrame extends JFrame {
 	private JToggleButton btnBringToBack;
 	private JToggleButton btnToFront;
 	private JToggleButton btnBringToFront;
+	private JButton btnUndo;
+	private JButton btnRedo;
 
 	/**
 	 * Launch the application.
@@ -278,6 +280,24 @@ public class DrawingFrame extends JFrame {
 			}
 		});
 		pnlShapes.add(btnInsideColor, "cell 1 6,grow");
+		
+		btnUndo = new JButton("Undo");
+		btnUndo.setEnabled(false);
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.undo();
+			}
+		});
+		pnlShapes.add(btnUndo, "cell 0 14,grow");
+		
+		btnRedo = new JButton("Redo");
+		btnRedo.setEnabled(false);
+		btnRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.redo();
+			}
+		});
+		pnlShapes.add(btnRedo, "cell 1 14,grow");
 
 		
 	
@@ -426,6 +446,22 @@ public class DrawingFrame extends JFrame {
 		this.dlm.addElement(s);
 		JScrollBar sb = spLog.getVerticalScrollBar();
 		sb.setValue(sb.getMaximum()); 
+	}
+
+	public JButton getBtnUndo() {
+		return btnUndo;
+	}
+
+	public void setBtnUndo(JButton btnUndo) {
+		this.btnUndo = btnUndo;
+	}
+
+	public JButton getBtnRedo() {
+		return btnRedo;
+	}
+
+	public void setBtnRedo(JButton btnRedo) {
+		this.btnRedo = btnRedo;
 	}
 
 }
