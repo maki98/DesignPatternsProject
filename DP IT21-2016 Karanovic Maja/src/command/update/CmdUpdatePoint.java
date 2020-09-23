@@ -2,9 +2,10 @@ package command.update;
 
 import command.Command;
 import geometry.Point;
+import view.DrawingFrame;
 
 public class CmdUpdatePoint implements Command {
-	
+		
 	private Point originalState = new Point();
 	private Point oldState;
 	private Point newState;	
@@ -24,7 +25,6 @@ public class CmdUpdatePoint implements Command {
 		oldState.setY(newState.getY());
 		oldState.setColor(newState.getColor());		
 		
-
 	}
 
 	@Override
@@ -36,8 +36,7 @@ public class CmdUpdatePoint implements Command {
 		oldState.setX(originalState.getX());
 		oldState.setY(originalState.getY());
 		oldState.setColor(originalState.getColor());
-			
-
+		
 	}
 	
 	public String toString() {

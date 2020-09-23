@@ -375,7 +375,7 @@ public class DrawingController {
 				if(s instanceof Circle) {
 					DlgForCircle dialog = new DlgForCircle();
 					Circle old = (Circle) s;
-					Circle newc = (Circle) s;
+					Circle newc = (Circle) ((Circle) s).clone();
 					dialog.update(newc.getCenter().getX(), newc.getCenter().getY(), newc.getRadius(), newc.getColor(), newc.getInsideColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
@@ -388,12 +388,13 @@ public class DrawingController {
 						cmdUpdateCircle = new CmdUpdateCircle(old, newc);
 						executeCmd(cmdUpdateCircle);
 						frame.addToLog(cmdUpdateCircle.toString());
+
 					}
 				}
 				else if(s instanceof Rectangle) {
 					DlgForRectangle dialog = new DlgForRectangle();
 					Rectangle old = (Rectangle) s;
-					Rectangle newc = (Rectangle) s;
+					Rectangle newc = (Rectangle) ((Rectangle) s).clone();
 					dialog.update(newc.getUpperLeft().getX(), newc.getUpperLeft().getY(), newc.getPageLength(), newc.getHeight(), newc.getColor(), newc.getInsideColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
@@ -412,7 +413,7 @@ public class DrawingController {
 				else if(s instanceof Square) {
 					DlgForSquare dialog = new DlgForSquare();
 					Square old = (Square) s;
-					Square newc = (Square) s;
+					Square newc = (Square) ((Square) s).clone();
 					dialog.update(newc.getUpperLeft().getX(), newc.getUpperLeft().getY(), newc.getPageLength(), newc.getColor(), newc.getInsideColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
@@ -429,7 +430,7 @@ public class DrawingController {
 				}
 				else if(s instanceof HexagonAdapter) {
 					DlgForHexagon dialog = new DlgForHexagon();
-					HexagonAdapter old = (HexagonAdapter) s;
+					HexagonAdapter old = (HexagonAdapter) ((HexagonAdapter) s).clone();
 					dialog.update(old.getX(), old.getY(), old.getR(), old.getColor(), old.getInsideColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
@@ -449,8 +450,8 @@ public class DrawingController {
 				}
 				else if(s instanceof Point) {
 					DlgForPoint dialog = new DlgForPoint();
-					Point old = (Point) ((Point) s).clone();
-					Point newc = (Point) s;
+					Point old = (Point) s;
+					Point newc = (Point) ((Point) s).clone();
 					dialog.update(newc.getX(), newc.getY(), newc.getColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
@@ -491,6 +492,8 @@ public class DrawingController {
 	public void executeCmd(Command c) {
 		c.execute();
 		
+		frame.getView().repaint();
+		
 		undoStack.push(c);
 		redoStack.clear();
 		
@@ -519,6 +522,7 @@ public class DrawingController {
         
 		if(undoStack.isEmpty())
 			frame.getBtnUndo().setEnabled(false);
+		
 	}
 	
 	public void redo() {
