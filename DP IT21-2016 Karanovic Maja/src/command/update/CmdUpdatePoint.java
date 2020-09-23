@@ -10,11 +10,11 @@ public class CmdUpdatePoint implements Command {
 	private Point newState;	
 
 	public CmdUpdatePoint(Point oldState, Point newState) {
-		super();
 		this.oldState = oldState;
 		this.newState = newState;
-	}
 
+	}
+	
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
@@ -23,20 +23,26 @@ public class CmdUpdatePoint implements Command {
 		oldState.setX(newState.getX());
 		oldState.setY(newState.getY());
 		oldState.setColor(newState.getColor());		
+		
+
 	}
 
 	@Override
 	public void unexecute() {
 		// TODO Auto-generated method stub
+		System.out.println("old: " + oldState.toString());
+		System.out.println("new: " + originalState.toString());
+		
 		oldState.setX(originalState.getX());
 		oldState.setY(originalState.getY());
 		oldState.setColor(originalState.getColor());
 			
+
 	}
 	
 	public String toString() {
 		
-		return "update:point->OLD->" + originalState.toString() + ",NEW->point:" + oldState.toString();
+		return "update:point->OLD->" + originalState.toString() + ",NEW->point:" + newState.toString();
 	
 	}
 }

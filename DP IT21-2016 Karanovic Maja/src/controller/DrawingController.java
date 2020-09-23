@@ -219,12 +219,12 @@ public class DrawingController {
 
 					break;
 				}
-				else if (model.get(i).isSelected() == true)
+				/*else if (model.get(i).isSelected() == true)
 				{
 					CmdSelect cmdSelect = new CmdSelect(model.get(i));
 					cmdSelect.unexecute();
 					break;
-				}
+				}*/
 			}
 		}
 	}
@@ -449,7 +449,7 @@ public class DrawingController {
 				}
 				else if(s instanceof Point) {
 					DlgForPoint dialog = new DlgForPoint();
-					Point old = (Point) s;
+					Point old = (Point) ((Point) s).clone();
 					Point newc = (Point) s;
 					dialog.update(newc.getX(), newc.getY(), newc.getColor());
 					dialog.setVisible(true);
@@ -457,7 +457,8 @@ public class DrawingController {
 						newc.setX(dialog.getX());
 						newc.setY(dialog.getY());
 						newc.setColor(dialog.getContour());
-						
+						System.out.println("old: " + old.toString());
+						System.out.println("new: " + newc.toString());
 						cmdUpdatePoint = new CmdUpdatePoint(old, newc);
 						executeCmd(cmdUpdatePoint);
 						frame.addToLog(cmdUpdatePoint.toString());
@@ -493,6 +494,7 @@ public class DrawingController {
 		undoStack.push(c);
 		redoStack.clear();
 		
+        System.out.println("--------------");
         System.out.println("Size of Undo Stack : " + undoStack.size());
         System.out.println("Size of Redo Stack : " + redoStack.size());
 
@@ -504,14 +506,17 @@ public class DrawingController {
 	public void undo() {
 
 		frame.getBtnRedo().setEnabled(true);
+		
+		frame.addToLog("undo:" + undoStack.peek().toString());
 				
 		redoStack.push(undoStack.peek());
 		undoStack.peek().unexecute();
 		undoStack.pop();
 		
+        System.out.println("--------------");
         System.out.println("Size of Undo Stack : " + undoStack.size());
         System.out.println("Size of Redo Stack : " + redoStack.size());
-		
+        
 		if(undoStack.isEmpty())
 			frame.getBtnUndo().setEnabled(false);
 	}
@@ -519,10 +524,14 @@ public class DrawingController {
 	public void redo() {
 		
 		frame.getBtnUndo().setEnabled(true);
+		
+		frame.addToLog("redo:" + redoStack.peek().toString());
+		
 		undoStack.push(redoStack.peek());
 		redoStack.peek().execute();
 		redoStack.pop();
 		
+        System.out.println("--------------");
         System.out.println("Size of Undo Stack : " + undoStack.size());
         System.out.println("Size of Redo Stack : " + redoStack.size());
 		

@@ -20,7 +20,7 @@ public class CmdSelect implements Command {
 
 	@Override
 	public void unexecute() {
-		shape.setSelected(false);
+		shape.setSelected(true);
 	}
 	
 	@Override
