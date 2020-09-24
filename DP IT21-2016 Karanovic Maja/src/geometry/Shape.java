@@ -2,9 +2,10 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.Observable;
 
-public abstract class Shape extends Observable implements Moveable, Comparable<Object> {
+public abstract class Shape extends Observable implements Moveable, Comparable<Object>, Serializable {
 	
 	private Color color;
 	private String colorString;

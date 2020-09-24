@@ -11,11 +11,11 @@ import javax.swing.JOptionPane;
 
 import geometry.Shape;
 
-public class SavingDrawing implements Files {
+public class Drawing implements Files {
 	
 	private ArrayList<Shape> listOfShapes;
 
-	public SavingDrawing(ArrayList<Shape> listOfShapes) {
+	public Drawing(ArrayList<Shape> listOfShapes) {
 		this.listOfShapes = listOfShapes;
 	}
 
@@ -25,7 +25,7 @@ public class SavingDrawing implements Files {
 		JFileChooser saveDrawing = new JFileChooser("C:\\Users\\mkaranovic\\Desktop");
 		saveDrawing.setDialogTitle("Choose destination");
 		if (saveDrawing.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) { 
-			File drawing = new File(saveDrawing.getSelectedFile().getAbsolutePath()); 
+			File drawing = new File(saveDrawing.getSelectedFile().getAbsolutePath());
 
 			if (drawing.exists()) { 
 				JOptionPane.showMessageDialog(null, "Name must be unique!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -33,7 +33,7 @@ public class SavingDrawing implements Files {
 				FileOutputStream fos;
 				ObjectOutputStream oos;
 				try { 
-					fos = new FileOutputStream(drawing);
+					fos = new FileOutputStream(drawing + ".ser");
 					oos = new ObjectOutputStream(fos);
 
 					oos.writeObject(listOfShapes);
@@ -47,6 +47,7 @@ public class SavingDrawing implements Files {
 				}
 			}
 		}
+		
 	}
 
 	@Override

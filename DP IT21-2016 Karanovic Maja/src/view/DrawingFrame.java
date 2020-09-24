@@ -330,7 +330,7 @@ public class DrawingFrame extends JFrame {
 		});
 		pnlShapes.add(btnOpen, "cell 1 17,grow");
 		
-		btnRemoveAll = new JButton("Remove all");
+		btnRemoveAll = new JButton("New");
 		btnRemoveAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.removeAll();

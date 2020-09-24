@@ -14,11 +14,11 @@ import controller.DrawingController;
 import geometry.DrawingModel;
 import view.DrawingFrame;
 
-public class SavingLog implements Files {
+public class Log implements Files {
 	
 	private DefaultListModel<String> dlm;  
 
-	public SavingLog(DefaultListModel<String> dlm) {
+	public Log(DefaultListModel<String> dlm) {
 		this.dlm = dlm;
 	}
 	

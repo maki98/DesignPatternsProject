@@ -41,8 +41,8 @@ import dialogs.DlgForPoint;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
 import files.Manager;
-import files.SavingDrawing;
-import files.SavingLog;
+import files.Drawing;
+import files.Log;
 import geometry.Circle;
 import geometry.DrawingModel;
 import geometry.Line;
@@ -291,18 +291,12 @@ public class DrawingController implements Serializable {
 		
 		if(frame.getBtnRemoveAll().isEnabled())
 		{
-			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove everything?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
-				Iterator<Shape> it = model.getAll().iterator();
-				while(it.hasNext()) {
-					Shape s = it.next();
-					s.setSelected(false);
-					cmdRemoveShape = new CmdRemoveShape(model, s);
-					it.remove();
-	
-					executeCmd(cmdRemoveShape);
-					frame.addToLog(cmdRemoveShape.toString());
-						
-				}
+			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to discard this drawing?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
+				model.getAll().clear();
+				listOfCommands.clear();
+				frame.getDlm().clear();
+				undoStack.clear();
+				redoStack.clear();
 			}
 		}
 		frame.getBtnRemoveAll().setSelected(false);
@@ -598,10 +592,10 @@ public class DrawingController implements Serializable {
 	public void save(int option) { 
 
 		if (option == JOptionPane.YES_OPTION) { 
-			Manager logMng = new Manager(new SavingLog(frame.getDlm()));
+			Manager logMng = new Manager(new Log(frame.getDlm()));
 			logMng.save();
 		} else if (option == JOptionPane.NO_OPTION) {
-			Manager drawingMng = new Manager(new SavingDrawing(model.getAll()));
+			Manager drawingMng = new Manager(new Drawing(model.getAll()));
 			drawingMng.save();
 		}
 	}
