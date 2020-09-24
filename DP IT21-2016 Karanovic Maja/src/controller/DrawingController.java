@@ -713,21 +713,25 @@ public class DrawingController implements Serializable {
 					executeCmd(cmdAddShape);
 					frame.addToLog(line);
 
-				}	
-				
-				//TO DO
-				else if (array[1].equals("hexagon")) {
+				} else if (array[1].equals("hexagon")) {
 					
-					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Integer length = Integer.parseInt(values[2]);
-					Integer height = Integer.parseInt(values[3]);
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
 
-					Color contourColor = parseColor(values[4], values[5], values[6]);
-					Color insideColor = parseColor(values[7], values[8], values[9]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
 
-					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
-					cmdAddShape = new CmdAddShape(model, r);
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					cmdAddShape = new CmdAddShape(model, ha);
 					executeCmd(cmdAddShape);
+					frame.addToLog(cmdAddShape.toString());
 				
 				}	
 			} else if (array[0].equals("update")) {
@@ -888,11 +892,11 @@ public class DrawingController implements Serializable {
 								
 						if(s instanceof Point)
 						{	
-							if(p.compareTo((Point) s) == 0)
+							if(p.compareTo((Point) s) == 0) {
 								cmdSelect = new CmdSelect((Point) s);
 								executeCmd(cmdSelect);
 								frame.addToLog(cmdSelect.toString());
-
+							}
 						}
 					}
 				} else if (array[1].equals("line")) {
@@ -909,10 +913,11 @@ public class DrawingController implements Serializable {
 								
 						if(s instanceof Line)
 						{	
-							if(l.compareTo((Line) s) == 0)
+							if(l.compareTo((Line) s) == 0) {
 								cmdSelect = new CmdSelect((Line) l);
 								executeCmd(cmdSelect);
 								frame.addToLog(cmdSelect.toString());
+							}
 						}
 					}
 
@@ -931,11 +936,11 @@ public class DrawingController implements Serializable {
 								
 						if(s instanceof Square)
 						{	
-							if(sq.compareTo((Square) s) == 0)
+							if(sq.compareTo((Square) s) == 0) {
 								cmdSelect = new CmdSelect((Square) s);
 								executeCmd(cmdSelect);
 								frame.addToLog(cmdSelect.toString());
-
+							}
 						}
 					}
 
@@ -954,11 +959,11 @@ public class DrawingController implements Serializable {
 								
 						if(s instanceof Circle)
 						{	
-							if(c.compareTo((Circle) s) == 0)
+							if(c.compareTo((Circle) s) == 0) {
 								cmdSelect = new CmdSelect((Circle) s);
 								executeCmd(cmdSelect);
 								frame.addToLog(cmdSelect.toString());
-
+							}
 						}
 					}
 
@@ -979,15 +984,50 @@ public class DrawingController implements Serializable {
 								
 						if(s instanceof Rectangle)
 						{	
-							if(r.compareTo((Rectangle) s) == 0)
+							if(r.compareTo((Rectangle) s) == 0) {
 								cmdSelect = new CmdSelect((Rectangle) s);
 								executeCmd(cmdSelect);
 								frame.addToLog(cmdSelect.toString());
+							}
 
 						}
 					}
 
-				}	
+				}	else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof HexagonAdapter)
+						{	
+							System.out.println("ha:" + ha.toString());
+							System.out.println("s: " + s.toString());
+							if(ha.equals((HexagonAdapter) s)) {
+								System.out.println("true");
+								cmdSelect = new CmdSelect((HexagonAdapter) s);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+							}
+
+						}
+					}
+				
+				}
 				
 			} else if ((array[0].equals("undo"))) {
 				
@@ -1128,6 +1168,36 @@ public class DrawingController implements Serializable {
 							}
 						}
 					}	
+				} else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof HexagonAdapter)
+						{
+							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
+							{
+								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
+								executeCmd(cmdRemoveShape);
+								frame.addToLog(cmdRemoveShape.toString());
+								removeSelection();
+							}
+						}
+					}	
+				
 				}
 				
 			} else if (array[0].equals("toback")) {
@@ -1154,7 +1224,7 @@ public class DrawingController implements Serializable {
 								
 							}
 						}
-						break;
+						//break;
 					}		
 				} else if(array[1].equals("line")) {
 					
@@ -1177,7 +1247,7 @@ public class DrawingController implements Serializable {
 
 							}
 						}
-						break;
+						//break;
 					}	
 				} else if(array[1].equals("circle")) {
 					
@@ -1201,7 +1271,7 @@ public class DrawingController implements Serializable {
 
 							}
 						}
-						break;
+						//break;
 					}	
 				} else if(array[1].equals("square")) {
 					
@@ -1225,7 +1295,7 @@ public class DrawingController implements Serializable {
 
 							}
 						}
-						break;
+						//break;
 					}	
 				} else if(array[1].equals("rectangle")) {
 					
@@ -1250,8 +1320,39 @@ public class DrawingController implements Serializable {
 								removeSelection();
 							}
 						}
-						break;
+						//break;
 					}	
+				} else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof HexagonAdapter)
+						{
+							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+							}
+						}
+						//break;
+					}		
+				
 				}
 				
 			} else if (array[0].equals("bringtoback")) {
@@ -1277,7 +1378,6 @@ public class DrawingController implements Serializable {
 								
 							}
 						}
-						break;
 					}		
 				} else if(array[1].equals("line")) {
 					
@@ -1300,7 +1400,6 @@ public class DrawingController implements Serializable {
 
 							}
 						}
-						break;
 					}	
 				} else if(array[1].equals("circle")) {
 					
@@ -1323,7 +1422,6 @@ public class DrawingController implements Serializable {
 								removeSelection();
 							}
 						}
-						break;
 					}	
 				} else if(array[1].equals("square")) {
 					
@@ -1346,7 +1444,6 @@ public class DrawingController implements Serializable {
 								removeSelection();
 							}
 						}
-						break;
 					}	
 				} else if(array[1].equals("rectangle")) {
 					
@@ -1372,8 +1469,42 @@ public class DrawingController implements Serializable {
 								removeSelection();
 							}
 						}
-						break;
 					}	
+				} else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						
+						if(model.getAll().get(i) instanceof HexagonAdapter)
+						{
+							System.out.println("TRUE");
+							System.out.println("from model: " + model.getAll().get(i).toString());
+							System.out.println("haaa: " + ha.toString());
+							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
+							{
+
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+							}
+						}
+					}	
+				
 				}
 				
 			} else if (array[0].equals("tofront")) {
@@ -1498,6 +1629,39 @@ public class DrawingController implements Serializable {
 						}
 						break;
 					}	
+				} else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof HexagonAdapter)
+						{
+							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
+							{
+								System.out.println(model.getAll().size());
+								System.out.println(model.getAll().get(i));
+								cmdToFront = new CmdToFront(model, model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				
 				}
 				
 			} else if (array[0].equals("bringtofront")) {
@@ -1620,6 +1784,38 @@ public class DrawingController implements Serializable {
 						}
 						break;
 					}	
+				} else if (array[1].equals("hexagon")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+					h.setBorderColor(contourColor);
+					h.setAreaColor(insideColor);
+					
+					HexagonAdapter ha = new HexagonAdapter(h);
+					ha.setColor(h.getBorderColor());
+					ha.setInsideColor(h.getAreaColor());
+										
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof HexagonAdapter)
+						{
+							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
+							{
+								
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				
 				}
 			}
 		}

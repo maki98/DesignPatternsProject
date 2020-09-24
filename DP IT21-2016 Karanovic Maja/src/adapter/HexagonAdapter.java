@@ -106,7 +106,7 @@ public class HexagonAdapter extends SurfaceShape implements Moveable {
 	
 	public String toString() 
 	{
-		return "hexagon->center:" + new Point(this.getX(), this.getY()).toStringWithoutColor() + ",radius:" + this.getR() + ",contourColor:" + colorToRgb(getColor()) + ",insideColor:" + colorToRgb(getInsideColor());
+		return "hexagon:" + new Point(this.getX(), this.getY()).toStringWithoutPoint() + "," + this.getR() + "," + colorToRgb(getColor()) + "," + colorToRgb(getInsideColor());
 	}
 	
 	@Override
