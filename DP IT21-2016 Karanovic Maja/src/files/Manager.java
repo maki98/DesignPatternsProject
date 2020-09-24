@@ -16,10 +16,4 @@ public class Manager implements Files {
 		strategy.save();
 	}
 
-	@Override
-	public void open(File file) {
-		// TODO Auto-generated method stub
-		strategy.open(file);
-	}
-
 }

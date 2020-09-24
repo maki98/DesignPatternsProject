@@ -604,7 +604,7 @@ public class DrawingController implements Serializable {
 		try {
 			JFileChooser fileChooser = new JFileChooser("C:\\Users\\mkaranovic\\Desktop");
 
-			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //log
 				File f = (fileChooser.getSelectedFile());
 
 				if (f.getAbsolutePath().endsWith("_log.txt")) {
@@ -621,7 +621,7 @@ public class DrawingController implements Serializable {
 					DlgForLogs dlgForLogs = new DlgForLogs(DrawingController.this, bf);
 					dlgForLogs.setVisible(true);
 
-				} else {
+				} else { //ceo crtez
 					FileInputStream fis = new FileInputStream(f);
 					ObjectInputStream ois = new ObjectInputStream(fis);
 					model.getAll().clear();
@@ -635,6 +635,7 @@ public class DrawingController implements Serializable {
 					ois.close();
 					fis.close();
 				}
+				
 			}
 
 		} catch (Exception ex) {

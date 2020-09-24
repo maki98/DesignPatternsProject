@@ -510,4 +510,68 @@ public class DrawingFrame extends JFrame {
 		this.btnRemoveAll = btnRemoveAll;
 	}
 
+	public JToggleButton getBtnPoint() {
+		return btnPoint;
+	}
+
+	public void setBtnPoint(JToggleButton btnPoint) {
+		this.btnPoint = btnPoint;
+	}
+
+	public JToggleButton getBtnLine() {
+		return btnLine;
+	}
+
+	public void setBtnLine(JToggleButton btnLine) {
+		this.btnLine = btnLine;
+	}
+
+	public JToggleButton getBtnSquare() {
+		return btnSquare;
+	}
+
+	public void setBtnSquare(JToggleButton btnSquare) {
+		this.btnSquare = btnSquare;
+	}
+
+	public JToggleButton getBtnRectangle() {
+		return btnRectangle;
+	}
+
+	public void setBtnRectangle(JToggleButton btnRectangle) {
+		this.btnRectangle = btnRectangle;
+	}
+
+	public JToggleButton getBtnCircle() {
+		return btnCircle;
+	}
+
+	public void setBtnCircle(JToggleButton btnCircle) {
+		this.btnCircle = btnCircle;
+	}
+
+	public JToggleButton getBtnHexagon() {
+		return btnHexagon;
+	}
+
+	public void setBtnHexagon(JToggleButton btnHexagon) {
+		this.btnHexagon = btnHexagon;
+	}
+
+	public JLabel getLblContourColor() {
+		return lblContourColor;
+	}
+
+	public void setLblContourColor(JLabel lblContourColor) {
+		this.lblContourColor = lblContourColor;
+	}
+
+	public JLabel getLblInsideColor() {
+		return lblInsideColor;
+	}
+
+	public void setLblInsideColor(JLabel lblInsideColor) {
+		this.lblInsideColor = lblInsideColor;
+	}
+
 }

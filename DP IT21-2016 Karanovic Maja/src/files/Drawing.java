@@ -1,6 +1,7 @@
 package files;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -47,12 +48,6 @@ public class Drawing implements Files {
 				}
 			}
 		}
-		
-	}
-
-	@Override
-	public void open(File file) {
-		// TODO Auto-generated method stub
 		
 	}
 

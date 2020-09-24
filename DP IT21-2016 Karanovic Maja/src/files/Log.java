@@ -57,10 +57,4 @@ public class Log implements Files {
 
 	}
 
-	@Override
-	public void open(File file) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
