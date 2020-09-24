@@ -262,6 +262,8 @@ public class DrawingController implements Serializable {
 
 	public void removeShapes(MouseEvent arg0) {
 		
+		ArrayList<Shape> shapes = new ArrayList<Shape>();
+		
 		if(frame.getBtnDelete().isEnabled())
 		{
 			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected shape?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
@@ -271,14 +273,17 @@ public class DrawingController implements Serializable {
 					
 					if(s.isSelected())
 					{
-						s.setSelected(false);
-						cmdRemoveShape = new CmdRemoveShape(model, s);
+						shapes.add(s);
 						it.remove();
 	
-						executeCmd(cmdRemoveShape);
-						frame.addToLog(cmdRemoveShape.toString());
+
 					}	
 				}
+				
+				cmdRemoveShape = new CmdRemoveShape(model, shapes);
+				executeCmd(cmdRemoveShape);
+				frame.addToLog(cmdRemoveShape.toString());
+				
 				frame.getBtnSelect().setSelected(false);
 			}
 
@@ -1051,154 +1056,109 @@ public class DrawingController implements Serializable {
 						this.redo();
 					}
 				}
-			} else if (array[0].equals("remove")) {
+			}  else if (array[0].equals("remove")) {
 				
-				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
-				String[] values = valuesLine.split(",");
+				ArrayList<Shape> shapes = new ArrayList<Shape>();
 				
-				if(array[1].equals("point")) {
+				for (int i = 0; i < array.length; i++)
+					
+				{
+
+					if(array[i].equals("point")) {
 						
-					Color contourColor = parseColor(values[2], values[3], values[4]);
-					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+							
+						Color contourColor = parseColor(values[2], values[3], values[4]);
+						Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+							
+						shapes.add(p);
 						
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof Point)
-						{
-							if(((Point) model.getAll().get(i)).compareTo(p) == 0)
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-
-								
-							}
-						}
-					}		
-				} else if(array[1].equals("line")) {
-					
-					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
-					Color contourColor = parseColor(values[4], values[5], values[6]);
-					
-					Line l = new Line(first, last, contourColor);
-					
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof Line)
-						{
-							if(((Line) model.getAll().get(i)).compareTo(l) == 0)
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-
-							}
-						}
-					}	
-				} else if(array[1].equals("circle")) {
-					
-					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Integer radius = Integer.parseInt(values[2]);
-					Color contourColor = parseColor(values[3], values[4], values[5]);
-					Color insideColor = parseColor(values[6], values[7], values[8]);
-
-					Circle c = new Circle(center, radius, contourColor, insideColor);
-					
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof Circle)
-						{
-							if(((Circle) model.getAll().get(i)).compareTo(c) == 0)
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-
-							}
-						}
-					}	
-				} else if(array[1].equals("square")) {
-					
-					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Integer length = Integer.parseInt(values[2]);
-					Color contourColor = parseColor(values[3], values[4], values[5]);
-					Color insideColor = parseColor(values[6], values[7], values[8]);
-
-					Square s = new Square(upperLeft, length, contourColor, insideColor);
-					
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof Square)
-						{
-							if(((Square) model.getAll().get(i)).compareTo(s) == 0)
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-
-							}
-						}
-					}	
-				} else if(array[1].equals("rectangle")) {
-					
-					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Integer length = Integer.parseInt(values[2]);
-					Integer height = Integer.parseInt(values[3]);
-
-					Color contourColor = parseColor(values[4], values[5], values[6]);
-					Color insideColor = parseColor(values[7], values[8], values[9]);
-
-					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
-					
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof Rectangle)
-						{
-							if(((Rectangle) model.getAll().get(i)).compareTo(r) == 0)
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-							}
-						}
-					}	
-				} else if (array[1].equals("hexagon")) {
-					
-					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-					Integer radius = Integer.parseInt(values[2]);
-
-					Color contourColor = parseColor(values[3], values[4], values[5]);
-					Color insideColor = parseColor(values[6], values[7], values[8]);
-
-					Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
-					h.setBorderColor(contourColor);
-					h.setAreaColor(insideColor);
-					
-					HexagonAdapter ha = new HexagonAdapter(h);
-					ha.setColor(h.getBorderColor());
-					ha.setInsideColor(h.getAreaColor());
-										
-					for(int i = 0; i < model.getAll().size(); i++)
-					{
-						if(model.getAll().get(i) instanceof HexagonAdapter)
-						{
-							if(((HexagonAdapter) model.getAll().get(i)).equals(ha))
-							{
-								cmdRemoveShape = new CmdRemoveShape(model, model.getAll().get(i));
-								executeCmd(cmdRemoveShape);
-								frame.addToLog(cmdRemoveShape.toString());
-								removeSelection();
-							}
-						}
-					}	
-				
+					} else if(array[i].equals("line")) {
+						
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+						
+						Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+						Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+						Color contourColor = parseColor(values[4], values[5], values[6]);
+						
+						Line l = new Line(first, last, contourColor);
+						
+						shapes.add(l);
+					} else if(array[i].equals("circle")) {
+						
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+						
+						Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+						Integer radius = Integer.parseInt(values[2]);
+						Color contourColor = parseColor(values[3], values[4], values[5]);
+						Color insideColor = parseColor(values[6], values[7], values[8]);
+	
+						Circle c = new Circle(center, radius, contourColor, insideColor);
+						
+						shapes.add(c);
+					} else if(array[i].equals("square")) {
+						
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+						
+						Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+						Integer length = Integer.parseInt(values[2]);
+						Color contourColor = parseColor(values[3], values[4], values[5]);
+						Color insideColor = parseColor(values[6], values[7], values[8]);
+	
+						Square s = new Square(upperLeft, length, contourColor, insideColor);
+						
+						shapes.add(s);
+					} else if(array[i].equals("rectangle")) {
+						
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+						
+						Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+						Integer length = Integer.parseInt(values[2]);
+						Integer height = Integer.parseInt(values[3]);
+	
+						Color contourColor = parseColor(values[4], values[5], values[6]);
+						Color insideColor = parseColor(values[7], values[8], values[9]);
+	
+						Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+						
+						shapes.add(r);	
+					} else if (array[i].equals("hexagon")) {
+						
+						String valuesLine = array[i+1].replaceAll("[^0-9,.]", "");
+						String[] values = valuesLine.split(",");
+						
+						Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+						Integer radius = Integer.parseInt(values[2]);
+	
+						Color contourColor = parseColor(values[3], values[4], values[5]);
+						Color insideColor = parseColor(values[6], values[7], values[8]);
+	
+						Hexagon h = new Hexagon(center.getX(), center.getY(), radius);
+						h.setBorderColor(contourColor);
+						h.setAreaColor(insideColor);
+						
+						HexagonAdapter ha = new HexagonAdapter(h);
+						ha.setColor(h.getBorderColor());
+						ha.setInsideColor(h.getAreaColor());
+											
+						shapes.add(ha);
+					}
 				}
+				
+				for(int i = 0; i < shapes.size(); i++) {
+					System.out.println(i + ": " + shapes.get(i).toString());
+				}
+				
+				cmdRemoveShape = new CmdRemoveShape(model, shapes);
+				executeCmd(cmdRemoveShape);
+				frame.addToLog(cmdRemoveShape.toString());
+				
+
 				
 			} else if (array[0].equals("toback")) {
 				
