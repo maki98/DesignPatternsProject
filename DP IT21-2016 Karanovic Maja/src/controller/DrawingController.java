@@ -669,9 +669,7 @@ public class DrawingController implements Serializable {
 					cmdAddShape = new CmdAddShape(model, p);
 					executeCmd(cmdAddShape);
 					frame.addToLog(line);
-				}
-				
-				else if (array[1].equals("line")) {
+				} else if (array[1].equals("line")) {
 					
 					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
@@ -682,9 +680,7 @@ public class DrawingController implements Serializable {
 					executeCmd(cmdAddShape);
 					frame.addToLog(line);
 
-				}
-				
-				else if (array[1].equals("square")) {
+				} else if (array[1].equals("square")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -696,9 +692,7 @@ public class DrawingController implements Serializable {
 					executeCmd(cmdAddShape);
 					frame.addToLog(line);
 
-				}	
-				
-				else if (array[1].equals("circle")) {
+				} else if (array[1].equals("circle")) {
 					
 					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer radius = Integer.parseInt(values[2]);
@@ -710,9 +704,7 @@ public class DrawingController implements Serializable {
 					executeCmd(cmdAddShape);
 					frame.addToLog(line);
 
-				}
-				
-				else if (array[1].equals("rectangle")) {
+				} else if (array[1].equals("rectangle")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -743,8 +735,7 @@ public class DrawingController implements Serializable {
 					executeCmd(cmdAddShape);
 				
 				}	
-			}
-			else if (array[0].equals("update")) {
+			} else if (array[0].equals("update")) {
 				System.out.println(array[2]);
 				System.out.println(array[3]);
 				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
@@ -775,8 +766,7 @@ public class DrawingController implements Serializable {
 								removeSelection();
 						}
 					}
-				}
-				else if (array[1].equals("line")) {
+				} else if (array[1].equals("line")) {
 
 					Line oldState = new Line(new Point(Integer.parseInt(values[0]), 
 							Integer.parseInt(values[1])), new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3])),
@@ -801,8 +791,7 @@ public class DrawingController implements Serializable {
 								removeSelection();
 						}
 					}
-				}
-				else if (array[1].equals("circle")) {
+				} else if (array[1].equals("circle")) {
 
 					Circle oldState = new Circle(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])), 
 							Integer.parseInt(values[2]), 
@@ -830,8 +819,7 @@ public class DrawingController implements Serializable {
 
 						}
 					}
-				}
-				else if (array[1].equals("square")) {
+				} else if (array[1].equals("square")) {
 
 					Square oldState = new Square(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])),
 							Integer.parseInt(values[2]),
@@ -859,8 +847,7 @@ public class DrawingController implements Serializable {
 
 						}
 					}
-				}
-				else if (array[1].equals("rectangle")) {
+				} else if (array[1].equals("rectangle")) {
 
 					Rectangle oldState = new Rectangle(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])),
 							Integer.parseInt(values[2]),
@@ -891,8 +878,7 @@ public class DrawingController implements Serializable {
 						}
 					}
 				}
-			} 
-			else if (array[0].equals("select")) {
+			} else if (array[0].equals("select")) {
 
 				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
 				String[] values = valuesLine.split(",");
@@ -914,9 +900,7 @@ public class DrawingController implements Serializable {
 
 						}
 					}
-				}
-				
-				else if (array[1].equals("line")) {
+				} else if (array[1].equals("line")) {
 					
 					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
@@ -937,9 +921,7 @@ public class DrawingController implements Serializable {
 						}
 					}
 
-				}
-				
-				else if (array[1].equals("square")) {
+				} else if (array[1].equals("square")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -962,9 +944,7 @@ public class DrawingController implements Serializable {
 						}
 					}
 
-				}	
-				
-				else if (array[1].equals("circle")) {
+				} else if (array[1].equals("circle")) {
 					
 					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer radius = Integer.parseInt(values[2]);
@@ -987,9 +967,7 @@ public class DrawingController implements Serializable {
 						}
 					}
 
-				}
-				
-				else if (array[1].equals("rectangle")) {
+				} else if (array[1].equals("rectangle")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -1027,8 +1005,7 @@ public class DrawingController implements Serializable {
 						this.undo();
 					}
 				}
-			}
-			else if ((array[0].equals("redo"))) {
+			} else if ((array[0].equals("redo"))) {
 				
 				String logCommand = line.substring(5);
 				
@@ -1039,8 +1016,7 @@ public class DrawingController implements Serializable {
 						this.redo();
 					}
 				}
-			}
-			else if (array[0].equals("remove")) {
+			} else if (array[0].equals("remove")) {
 				
 				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
 				String[] values = valuesLine.split(",");
@@ -1065,8 +1041,7 @@ public class DrawingController implements Serializable {
 							}
 						}
 					}		
-				}
-				else if(array[1].equals("line")) {
+				} else if(array[1].equals("line")) {
 					
 					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
@@ -1088,8 +1063,7 @@ public class DrawingController implements Serializable {
 							}
 						}
 					}	
-				}
-				else if(array[1].equals("circle")) {
+				} else if(array[1].equals("circle")) {
 					
 					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer radius = Integer.parseInt(values[2]);
@@ -1112,8 +1086,7 @@ public class DrawingController implements Serializable {
 							}
 						}
 					}	
-				}
-				else if(array[1].equals("square")) {
+				} else if(array[1].equals("square")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -1136,8 +1109,7 @@ public class DrawingController implements Serializable {
 							}
 						}
 					}	
-				}
-				else if(array[1].equals("rectangle")) {
+				} else if(array[1].equals("rectangle")) {
 					
 					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 					Integer length = Integer.parseInt(values[2]);
@@ -1163,8 +1135,499 @@ public class DrawingController implements Serializable {
 					}	
 				}
 				
+			} else if (array[0].equals("toback")) {
+				
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				
+				if(array[1].equals("point")) {
+					
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+						
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Point)
+						{
+							if(((Point) model.getAll().get(i)).compareTo(p) == 0)
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+
+								
+							}
+						}
+						break;
+					}		
+				} else if(array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Line)
+						{
+							if(((Line) model.getAll().get(i)).compareTo(l) == 0)
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Circle)
+						{
+							if(((Circle) model.getAll().get(i)).compareTo(c) == 0)
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square s = new Square(upperLeft, length, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Square)
+						{
+							if(((Square) model.getAll().get(i)).compareTo(s) == 0)
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Rectangle)
+						{
+							if(((Rectangle) model.getAll().get(i)).compareTo(r) == 0)
+							{
+								cmdToBack = new CmdToBack(model, model.getAll().get(i));
+								executeCmd(cmdToBack);
+								frame.addToLog(cmdToBack.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				}
+				
+			} else if (array[0].equals("bringtoback")) {
+				
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				
+				if(array[1].equals("point")) {
+					
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+						
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Point)
+						{
+							if(((Point) model.getAll().get(i)).compareTo(p) == 0)
+							{
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+								
+							}
+						}
+						break;
+					}		
+				} else if(array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Line)
+						{
+							if(((Line) model.getAll().get(i)).compareTo(l) == 0)
+							{
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Circle)
+						{
+							if(((Circle) model.getAll().get(i)).compareTo(c) == 0)
+							{
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square s = new Square(upperLeft, length, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Square)
+						{
+							if(((Square) model.getAll().get(i)).compareTo(s) == 0)
+							{
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Rectangle)
+						{
+							if(((Rectangle) model.getAll().get(i)).compareTo(r) == 0)
+							{
+								
+								cmdBringToBack = new CmdBringToBack(model, model.getAll().get(i));
+								executeCmd(cmdBringToBack);
+								frame.addToLog(cmdBringToBack.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				}
+				
+			} else if (array[0].equals("tofront")) {
+				
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				
+				if(array[1].equals("point")) {
+					
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+						
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Point)
+						{
+							if(((Point) model.getAll().get(i)).compareTo(p) == 0)
+							{
+								cmdToFront = new CmdToFront(model, model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+								
+							}
+						}
+						break;
+					}		
+				} else if(array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Line)
+						{
+							if(((Line) model.getAll().get(i)).compareTo(l) == 0)
+							{
+								cmdToFront = new CmdToFront(model, model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Circle)
+						{
+							if(((Circle) model.getAll().get(i)).compareTo(c) == 0)
+							{
+								cmdToFront = new CmdToFront(model, (Circle) model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square s = new Square(upperLeft, length, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Square)
+						{
+							if(((Square) model.getAll().get(i)).compareTo(s) == 0)
+							{
+								System.out.println(model.getAll().size());
+								System.out.println(model.getAll().get(i));
+								cmdToFront = new CmdToFront(model, model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Rectangle)
+						{
+							if(((Rectangle) model.getAll().get(i)).compareTo(r) == 0)
+							{
+								System.out.println(model.getAll().size());
+								System.out.println(model.getAll().get(i));
+								cmdToFront = new CmdToFront(model, model.getAll().get(i));
+								executeCmd(cmdToFront);
+								frame.addToLog(cmdToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				}
+				
+			} else if (array[0].equals("bringtofront")) {
+				
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				
+				if(array[1].equals("point")) {
+					
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+						
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Point)
+						{
+							if(((Point) model.getAll().get(i)).compareTo(p) == 0)
+							{
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+								
+							}
+						}
+						break;
+					}		
+				} else if(array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Line)
+						{
+							if(((Line) model.getAll().get(i)).compareTo(l) == 0)
+							{
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Circle)
+						{
+							if(((Circle) model.getAll().get(i)).compareTo(c) == 0)
+							{
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+							}
+							break;
+						}
+					}	
+				} else if(array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square s = new Square(upperLeft, length, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Square)
+						{
+							if(((Square) model.getAll().get(i)).compareTo(s) == 0)
+							{
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
+				} else if(array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					
+					for(int i = 0; i < model.getAll().size(); i++)
+					{
+						if(model.getAll().get(i) instanceof Rectangle)
+						{
+							if(((Rectangle) model.getAll().get(i)).compareTo(r) == 0)
+							{
+								
+								cmdBringToFront = new CmdBringToFront(model, model.getAll().get(i));
+								executeCmd(cmdBringToFront);
+								frame.addToLog(cmdBringToFront.toString());
+								removeSelection();
+							}
+						}
+						break;
+					}	
 				}
 			}
+		}
 				
 	
 
