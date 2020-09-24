@@ -11,7 +11,7 @@ public class CmdSelect implements Command {
 	public CmdSelect(Shape shape)
 	{
 		this.shape = shape;
-	}
+	} 
 	
 	@Override
 	public void execute() {
