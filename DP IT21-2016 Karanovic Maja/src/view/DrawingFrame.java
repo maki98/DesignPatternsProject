@@ -27,6 +27,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -63,11 +64,22 @@ public class DrawingFrame extends JFrame {
 	private DefaultListModel<String> dlm = new DefaultListModel<String>(); 
 	private JButton btnClearAll;
 	private JToggleButton btnToBack;
+	public DefaultListModel<String> getDlm() {
+		return dlm;
+	}
+
+	public void setDlm(DefaultListModel<String> dlm) {
+		this.dlm = dlm;
+	}
+
 	private JToggleButton btnBringToBack;
 	private JToggleButton btnToFront;
 	private JToggleButton btnBringToFront;
 	private JButton btnUndo;
 	private JButton btnRedo;
+	private JButton btnSave;
+	private JButton btnOpen;
+	private JButton btnRemoveAll;
 
 	/**
 	 * Launch the application.
@@ -106,7 +118,7 @@ public class DrawingFrame extends JFrame {
 		
 		//ubacivanje panela koji sadrzi dugmice za odabir oblika
 		pnlShapes = new JPanel();
-		pnlShapes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Shapes:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		pnlShapes.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Options:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		contentPane.add(pnlShapes, BorderLayout.WEST);
 		pnlShapes.setLayout(new MigLayout("", "[grow][]", "[][][][][][][][][][][][][][][][][][][][grow]"));
 		
@@ -252,7 +264,7 @@ public class DrawingFrame extends JFrame {
 		updateShapesGroup.add(btnModify);
 		updateShapesGroup.add(btnDelete);
 
-		//updateShapesGroup.add(btnInsideColor);
+		updateShapesGroup.add(btnInsideColor);
 		updateShapesGroup.add(btnContourColor);
 	
 		
@@ -298,8 +310,33 @@ public class DrawingFrame extends JFrame {
 			}
 		});
 		pnlShapes.add(btnRedo, "cell 1 14,grow");
-
 		
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object[] options = { "Save log", "Save drawing" };
+				int option = JOptionPane.showOptionDialog(null, "How do you want to save this?", "Save", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+				controller.save(option);
+			}
+		});
+		pnlShapes.add(btnSave, "cell 0 17,grow");
+		
+		btnOpen = new JButton("Open");
+		btnOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.open();
+			}
+		});
+		pnlShapes.add(btnOpen, "cell 1 17,grow");
+		
+		btnRemoveAll = new JButton("Remove all");
+		btnRemoveAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.removeAll();
+			}
+		});
+		pnlShapes.add(btnRemoveAll, "cell 0 18,grow");
 	
 		//ubacivanje panela za logove
 		pnlLog = new JPanel();
@@ -314,6 +351,7 @@ public class DrawingFrame extends JFrame {
 		jlLog.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 2, true), "Logs:", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		spLog.setViewportView(jlLog);
 
+		//dlm
 		jlLog.setModel(dlm);
 		
 		//mouse event listener
@@ -462,6 +500,14 @@ public class DrawingFrame extends JFrame {
 
 	public void setBtnRedo(JButton btnRedo) {
 		this.btnRedo = btnRedo;
+	}
+	
+	public JButton getBtnRemoveAll() {
+		return btnRemoveAll;
+	}
+
+	public void setBtnRemoveAll(JButton btnRemoveAll) {
+		this.btnRemoveAll = btnRemoveAll;
 	}
 
 }

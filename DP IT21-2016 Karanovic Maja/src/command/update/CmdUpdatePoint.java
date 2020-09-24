@@ -41,7 +41,7 @@ public class CmdUpdatePoint implements Command {
 	
 	public String toString() {
 		
-		return "update:point->OLD->" + originalState.toString() + ",NEW->point:" + newState.toString();
+		return "update:" + originalState.toString() + "->" + newState.toString();
 	
 	}
 }

@@ -45,7 +45,7 @@ public class CmdUpdateHexagon implements Command {
 
 	public String toString() {
 		
-		return "update:hexagon->OLD->" + originalState.toString() + ",NEW->center:" + oldState.toString();
+		return "update:" + originalState.toString() + "->" + oldState.toString();
 	
 	}
 }

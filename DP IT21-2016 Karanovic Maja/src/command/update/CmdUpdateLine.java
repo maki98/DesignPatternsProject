@@ -41,7 +41,7 @@ public class CmdUpdateLine implements Command {
 
 	public String toString() {
 		
-		return "update:line->OLD->" + originalState.toString() + ",NEW->line:" + oldState.toString();
+		return "update:" + originalState.toString() + "->" + oldState.toString();
 	
 	}
 	

@@ -44,7 +44,7 @@ public class Rectangle extends Square implements Moveable {
 	
 	public String toString()
 	{
-		return "rectangle->upperLeft:" + upperLeft.toStringWithoutColor() + ",lengt:" + pageLength + ",height:" + height + ",contourColor:" + colorToRgb(getColor()) + ",insideColor:" + colorToRgb(getInsideColor());		
+		return "rectangle:" + upperLeft.toStringWithoutPoint() + "," + pageLength + "," + height + "," + colorToRgb(getColor()) + "," + colorToRgb(getInsideColor());		
 	}
 	
 	public boolean equals(Object obj) 

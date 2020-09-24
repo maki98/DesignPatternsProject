@@ -80,7 +80,7 @@ public class Line extends Shape implements Moveable {
 	
 	public String toString() 
 	{
-		return "line->first:" + first.toStringWithoutColor() + ",last:" + last.toStringWithoutColor() + ",color:" + this.colorToRgb(getColor());
+		return "line:" + first.toStringWithoutPoint() + "," + last.toStringWithoutPoint() + "," + this.colorToRgb(getColor());
 	}
 	
 	public double length()

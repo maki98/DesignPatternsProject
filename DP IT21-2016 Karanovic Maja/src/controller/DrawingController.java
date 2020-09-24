@@ -2,6 +2,12 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -9,6 +15,7 @@ import java.util.Stack;
 
 import javax.sound.sampled.ReverbType;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import adapter.HexagonAdapter;
@@ -29,9 +36,13 @@ import command.update.CmdUpdateSquare;
 import dialogs.DlgForCircle;
 import dialogs.DlgForHexagon;
 import dialogs.DlgForLine;
+import dialogs.DlgForLogs;
 import dialogs.DlgForPoint;
 import dialogs.DlgForRectangle;
 import dialogs.DlgForSquare;
+import files.Manager;
+import files.SavingDrawing;
+import files.SavingLog;
 import geometry.Circle;
 import geometry.DrawingModel;
 import geometry.Line;
@@ -43,7 +54,7 @@ import hexagon.Hexagon;
 import observer.DrawingObserver;
 import view.DrawingFrame;
 
-public class DrawingController {
+public class DrawingController implements Serializable {
 
 	private DrawingModel model;
 	private DrawingFrame frame;
@@ -219,12 +230,13 @@ public class DrawingController {
 
 					break;
 				}
-				/*else if (model.get(i).isSelected() == true)
+				else if (model.get(i).isSelected() == true)
 				{
 					CmdSelect cmdSelect = new CmdSelect(model.get(i));
 					cmdSelect.unexecute();
+
 					break;
-				}*/
+				}
 			}
 		}
 	}
@@ -234,7 +246,8 @@ public class DrawingController {
 		while(it.hasNext())
 		{
 			Shape shape = it.next();
-			shape.setSelected(false);
+			CmdSelect cmdSelect = new CmdSelect(shape);
+			cmdSelect.unexecute();
 		}
 	}
 
@@ -263,6 +276,27 @@ public class DrawingController {
 		}
 		frame.getBtnDelete().setSelected(false);
 		
+	}
+	
+	public void removeAll() {
+		
+		if(frame.getBtnRemoveAll().isEnabled())
+		{
+			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to remove everything?", "Warning!", JOptionPane.YES_NO_OPTION) == 0) {
+				Iterator<Shape> it = model.getAll().iterator();
+				while(it.hasNext()) {
+					Shape s = it.next();
+					s.setSelected(false);
+					cmdRemoveShape = new CmdRemoveShape(model, s);
+					it.remove();
+	
+					executeCmd(cmdRemoveShape);
+					frame.addToLog(cmdRemoveShape.toString());
+						
+				}
+			}
+		}
+		frame.getBtnRemoveAll().setSelected(false);
 	}
 	
 	public void toBack() {
@@ -370,7 +404,6 @@ public class DrawingController {
 					
 			if(s.isSelected())
 			{
-				s.setSelected(false);
 
 				if(s instanceof Circle) {
 					DlgForCircle dialog = new DlgForCircle();
@@ -447,6 +480,7 @@ public class DrawingController {
 						executeCmd(cmdUpdateHexagon);
 						frame.addToLog(cmdUpdateHexagon.toString());
 					}
+						
 				}
 				else if(s instanceof Point) {
 					DlgForPoint dialog = new DlgForPoint();
@@ -486,11 +520,13 @@ public class DrawingController {
 
 			}	
 		}
-		frame.getBtnSelect().setSelected(false);
+		frame.getBtnModify().setSelected(false);
 	}
 	
 	public void executeCmd(Command c) {
+			
 		c.execute();
+
 		
 		frame.getView().repaint();
 		
@@ -504,6 +540,7 @@ public class DrawingController {
 		
 		frame.getBtnUndo().setEnabled(true);
 		frame.getBtnRedo().setEnabled(false);
+		
 	}
 	
 	public void undo() {
@@ -544,6 +581,451 @@ public class DrawingController {
 	}
 
 	
+	public void save(int option) { 
+
+		if (option == JOptionPane.YES_OPTION) { 
+			Manager logMng = new Manager(new SavingLog(frame.getDlm()));
+			logMng.save();
+		} else if (option == JOptionPane.NO_OPTION) {
+			Manager drawingMng = new Manager(new SavingDrawing(model.getAll()));
+			drawingMng.save();
+		}
+	}
+	
+	public void open() {
+		try {
+			JFileChooser fileChooser = new JFileChooser("C:\\Users\\mkaranovic\\Desktop");
+
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File f = (fileChooser.getSelectedFile());
+
+				if (f.getAbsolutePath().endsWith("_log.txt")) {
+
+					model.getAll().clear();
+					listOfCommands.clear();
+
+					FileReader fr = new FileReader(f);
+					BufferedReader bf = new BufferedReader(fr);
+
+					DlgForLogs dlgForLogs = new DlgForLogs(DrawingController.this, bf);
+					dlgForLogs.setVisible(true);
+
+				} else {
+					FileInputStream fis = new FileInputStream(f);
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					model.getAll().clear();
+					listOfCommands.clear();
+					ArrayList<Shape> inputList = (ArrayList<Shape>) ois.readObject();
+
+					for (Shape s : inputList) {
+						model.add(s);
+					}
+
+					ois.close();
+					fis.close();
+				}
+			}
+
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, "Error while opening file", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void loadNext(String line) {
+
+		//array: [add,point,(96,69,[0,0,0])]
+		//values: 96,69,0,0,0
+		String[] array = line.split(":");
+		
+			if (array[0].equals("add")) {
+
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+
+
+				if (array[1].equals("point")) {
+
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+					
+					cmdAddShape = new CmdAddShape(model, p);
+					executeCmd(cmdAddShape);
+					frame.addToLog(line);
+				}
+				
+				else if (array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					cmdAddShape = new CmdAddShape(model, l);
+					executeCmd(cmdAddShape);
+					frame.addToLog(line);
+
+				}
+				
+				else if (array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square s = new Square(upperLeft, length, contourColor, insideColor);
+					cmdAddShape = new CmdAddShape(model, s);
+					executeCmd(cmdAddShape);
+					frame.addToLog(line);
+
+				}	
+				
+				else if (array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					cmdAddShape = new CmdAddShape(model, c);
+					executeCmd(cmdAddShape);
+					frame.addToLog(line);
+
+				}
+				
+				else if (array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					cmdAddShape = new CmdAddShape(model, r);
+					executeCmd(cmdAddShape);
+					frame.addToLog(line);
+
+				}	
+				
+				//TO DO
+				else if (array[1].equals("hexagon")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					cmdAddShape = new CmdAddShape(model, r);
+					executeCmd(cmdAddShape);
+				
+				}	
+			}
+			else if (array[0].equals("update")) {
+				System.out.println(array[2]);
+				System.out.println(array[3]);
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				String newValuesLine = array[3].replaceAll("[^0-9,.]", "");
+				String[] newValues = newValuesLine.split(",");
+				
+				if (array[1].equals("point")) {
+
+					Point oldState = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]),
+							parseColor(values[2], values[3], values[4]));
+					Point newState = new Point(Integer.parseInt(newValues[0]), Integer.parseInt(newValues[1]),
+							parseColor(newValues[2], newValues[3], newValues[4]));
+					
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Point)
+						{	
+							if(oldState.compareTo((Point) s) == 0)
+								cmdUpdatePoint = new CmdUpdatePoint((Point) s, newState);
+								executeCmd(cmdUpdatePoint);
+								frame.addToLog(cmdUpdatePoint.toString());
+
+						}
+					}
+				}
+				else if (array[1].equals("line")) {
+
+					Line oldState = new Line(new Point(Integer.parseInt(values[0]), 
+							Integer.parseInt(values[1])), new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3])),
+							parseColor(values[4], values[5], values[6]));
+					Line newState = new Line(new Point(Integer.parseInt(newValues[0]), 
+							Integer.parseInt(newValues[1])), new Point(Integer.parseInt(newValues[2]), Integer.parseInt(newValues[3])),
+							parseColor(newValues[4], newValues[5], newValues[6]));
+					
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Line)
+						{	
+							if(oldState.compareTo((Line) s) == 0)
+								cmdUpdateLine = new CmdUpdateLine((Line) s, newState);
+								executeCmd(cmdUpdateLine);
+								frame.addToLog(cmdUpdateLine.toString());
+
+						}
+					}
+				}
+				else if (array[1].equals("circle")) {
+
+					Circle oldState = new Circle(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])), 
+							Integer.parseInt(values[2]), 
+							parseColor(values[3], values[4], values[5]),
+							parseColor(values[6], values[7], values[8]));
+					Circle newState = new Circle(new Point(Integer.parseInt(newValues[0]), Integer.parseInt(newValues[1])), 
+							Integer.parseInt(newValues[2]), 
+							parseColor(newValues[3], newValues[4], newValues[5]),
+							parseColor(newValues[6], newValues[7], newValues[8]));		
+					
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Circle)
+						{	
+							if(oldState.compareTo((Circle) s) == 0)
+								cmdUpdateCircle = new CmdUpdateCircle((Circle) s, newState);
+								executeCmd(cmdUpdateCircle);
+								frame.addToLog(cmdUpdateCircle.toString());
+
+						}
+					}
+				}
+				else if (array[1].equals("square")) {
+
+					Square oldState = new Square(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])),
+							Integer.parseInt(values[2]),
+							parseColor(values[3], values[4], values[5]),
+							parseColor(values[6], values[7], values[8]));
+					Square newState = new Square(new Point(Integer.parseInt(newValues[0]), Integer.parseInt(newValues[1])),
+							Integer.parseInt(newValues[2]),
+							parseColor(newValues[3], newValues[4], newValues[5]),
+							parseColor(newValues[6], newValues[7], newValues[8]));
+
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Square)
+						{	
+							if(oldState.compareTo((Square) s) == 0)
+								cmdUpdateSquare = new CmdUpdateSquare((Square) s, newState);
+								executeCmd(cmdUpdateSquare);
+								frame.addToLog(cmdUpdateSquare.toString());
+
+						}
+					}
+				}
+				else if (array[1].equals("rectangle")) {
+
+					Rectangle oldState = new Rectangle(new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1])),
+							Integer.parseInt(values[2]),
+							Integer.parseInt(values[3]),
+							parseColor(values[4], values[5], values[6]),
+							parseColor(values[7], values[8], values[9]));
+					Rectangle newState = new Rectangle(new Point(Integer.parseInt(newValues[0]), Integer.parseInt(newValues[1])),
+							Integer.parseInt(newValues[2]),
+							Integer.parseInt(newValues[3]),
+							parseColor(newValues[4], newValues[5], newValues[6]),
+							parseColor(newValues[7], newValues[8], newValues[9]));
+					
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Rectangle)
+						{	
+							if(oldState.compareTo((Rectangle) s) == 0)
+								cmdUpdateRectangle = new CmdUpdateRectangle((Rectangle) s, newState);
+								executeCmd(cmdUpdateRectangle);
+								frame.addToLog(cmdUpdateRectangle.toString());
+
+						}
+					}
+				}
+			} 
+			else if (array[0].equals("select")) {
+
+				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
+				String[] values = valuesLine.split(",");
+				if (array[1].equals("point")) {
+
+					Color contourColor = parseColor(values[2], values[3], values[4]);
+					Point p = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]), contourColor);
+					
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Point)
+						{	
+							if(p.compareTo((Point) s) == 0)
+								cmdSelect = new CmdSelect((Point) s);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+
+						}
+					}
+				}
+				
+				else if (array[1].equals("line")) {
+					
+					Point first = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Point last = new Point(Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					
+					Line l = new Line(first, last, contourColor);
+					
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Line)
+						{	
+							if(l.compareTo((Line) s) == 0)
+								cmdSelect = new CmdSelect((Line) l);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+						}
+					}
+
+				}
+				
+				else if (array[1].equals("square")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Square sq = new Square(upperLeft, length, contourColor, insideColor);
+					
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Square)
+						{	
+							if(sq.compareTo((Square) s) == 0)
+								cmdSelect = new CmdSelect((Square) s);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+
+						}
+					}
+
+				}	
+				
+				else if (array[1].equals("circle")) {
+					
+					Point center = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer radius = Integer.parseInt(values[2]);
+					Color contourColor = parseColor(values[3], values[4], values[5]);
+					Color insideColor = parseColor(values[6], values[7], values[8]);
+
+					Circle c = new Circle(center, radius, contourColor, insideColor);
+					
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Circle)
+						{	
+							if(c.compareTo((Circle) s) == 0)
+								cmdSelect = new CmdSelect((Circle) s);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+
+						}
+					}
+
+				}
+				
+				else if (array[1].equals("rectangle")) {
+					
+					Point upperLeft = new Point(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+					Integer length = Integer.parseInt(values[2]);
+					Integer height = Integer.parseInt(values[3]);
+
+					Color contourColor = parseColor(values[4], values[5], values[6]);
+					Color insideColor = parseColor(values[7], values[8], values[9]);
+
+					Rectangle r = new Rectangle(upperLeft, length, height, contourColor, insideColor);
+					
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof Rectangle)
+						{	
+							if(r.compareTo((Rectangle) s) == 0)
+								cmdSelect = new CmdSelect((Rectangle) s);
+								executeCmd(cmdSelect);
+								frame.addToLog(cmdSelect.toString());
+
+						}
+					}
+
+				}	
+				
+			} else if ((array[0].equals("undo"))) {
+				
+				String logCommand = line.substring(5);
+				
+				//obican for zbog CurrentModificationException
+				for(int i = 0; i < undoStack.size(); i++) {
+					if(undoStack.get(i).toString().compareTo(logCommand) == 0)
+					{
+						this.undo();
+					}
+				}
+			}
+			else if ((array[0].equals("redo"))) {
+				
+				String logCommand = line.substring(5);
+				
+				//obican for zbog CurrentModificationException
+				for(int i = 0; i < redoStack.size(); i++) {
+					if(redoStack.get(i).toString().compareTo(logCommand) == 0)
+					{
+						this.redo();
+					}
+				}
+			}
+	}
+
+
+	public Color parseColor(String r, String g, String b) {
+		Color color = new Color(Integer.parseInt(r), Integer.parseInt(g), Integer.parseInt(b));
+		return color;
+	}
 }
 
 

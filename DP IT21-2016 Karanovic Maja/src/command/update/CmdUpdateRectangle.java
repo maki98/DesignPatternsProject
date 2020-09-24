@@ -44,7 +44,7 @@ public class CmdUpdateRectangle implements Command {
 
 	public String toString() {
 		
-		return "update:rectangle->OLD->" + originalState.toString() + ",NEW->rectangle:" + oldState.toString();
+		return "update:" + originalState.toString() + "->" + oldState.toString();
 	
 	}
 }

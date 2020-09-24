@@ -101,7 +101,7 @@ public class Square extends SurfaceShape implements Moveable {
 	
 	public String toString() 
 	{
-		return "square->upperLeft:" + upperLeft.toStringWithoutColor() + ",length:" + pageLength + ",contourColor:" + colorToRgb(getColor()) + ",insideColor:" + colorToRgb(getInsideColor());
+		return "square:" + upperLeft.toStringWithoutPoint() + "," + pageLength + "," + colorToRgb(getColor()) + "," + colorToRgb(getInsideColor());
 	}
 	
 	public Line diagonal()

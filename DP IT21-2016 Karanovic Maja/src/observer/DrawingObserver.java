@@ -21,7 +21,7 @@ public class DrawingObserver implements Observer {
 		this.model=model;
 		this.frame=frame;
 	}
-	
+		
 	@Override
 	public void update(Observable arg0, Object arg1) {
 
@@ -42,7 +42,7 @@ public class DrawingObserver implements Observer {
 			frame.getBtnBringToBack().setEnabled(false);
 			frame.getBtnToFront().setEnabled(false);
 			frame.getBtnBringToFront().setEnabled(false);
-
+			
 		}
 		else if (count > 1){
 			frame.getBtnModify().setEnabled(false);
@@ -53,6 +53,7 @@ public class DrawingObserver implements Observer {
 			frame.getBtnToFront().setEnabled(false);
 			frame.getBtnBringToFront().setEnabled(false);
 
+			frame.getBtnRemoveAll().setEnabled(true);
 
 		}
 		else {
@@ -64,6 +65,7 @@ public class DrawingObserver implements Observer {
 			frame.getBtnToFront().setEnabled(true);
 			frame.getBtnBringToFront().setEnabled(true);
 
+			frame.getBtnRemoveAll().setEnabled(true);
 
 		}
 	}

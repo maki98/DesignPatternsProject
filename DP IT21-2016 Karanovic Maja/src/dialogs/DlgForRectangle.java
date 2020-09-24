@@ -145,7 +145,7 @@ public class DlgForRectangle extends JDialog {
 			gbc_btnContourColor.fill = GridBagConstraints.BOTH;
 			gbc_btnContourColor.insets = new Insets(0, 0, 5, 5);
 			gbc_btnContourColor.gridx = 5;
-			gbc_btnContourColor.gridy = 2;
+			gbc_btnContourColor.gridy = 3;
 			contentPanel.add(btnContourColor, gbc_btnContourColor);
 		}
 		{
@@ -190,10 +190,10 @@ public class DlgForRectangle extends JDialog {
 				}
 			});
 			GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
-			gbc_btnInsideColor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnInsideColor.insets = new Insets(0, 0, 0, 5);
 			gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
 			gbc_btnInsideColor.gridx = 5;
-			gbc_btnInsideColor.gridy = 3;
+			gbc_btnInsideColor.gridy = 4;
 			contentPanel.add(btnInsideColor, gbc_btnInsideColor);
 		}
 		{

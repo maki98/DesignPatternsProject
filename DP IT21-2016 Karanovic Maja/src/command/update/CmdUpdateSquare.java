@@ -41,7 +41,7 @@ public class CmdUpdateSquare implements Command {
 
 	public String toString() {
 		
-		return "update:square->OLD->" + originalState.toString() + ",NEW->square:" + oldState.toString();
+		return "update:" + originalState.toString() + "->" + oldState.toString();
 	
 	}
 }
