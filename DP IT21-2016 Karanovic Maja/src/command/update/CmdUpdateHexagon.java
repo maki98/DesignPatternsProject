@@ -28,6 +28,8 @@ public class CmdUpdateHexagon implements Command {
 		oldState.setR(newState.getR());
 		oldState.setColor(newState.getColor());
 		oldState.setInsideColor(newState.getInsideColor());
+		oldState.getHexagon().setBorderColor(newState.getHexagon().getBorderColor());
+		oldState.getHexagon().setAreaColor(newState.getHexagon().getAreaColor());
 
 	}
 
@@ -40,6 +42,8 @@ public class CmdUpdateHexagon implements Command {
 		oldState.setR(originalState.getR());
 		oldState.setColor(originalState.getColor());
 		oldState.setInsideColor(originalState.getInsideColor());
+		oldState.getHexagon().setBorderColor(originalState.getHexagon().getBorderColor());
+		oldState.getHexagon().setAreaColor(originalState.getHexagon().getAreaColor());
 		
 	}
 

@@ -472,16 +472,18 @@ public class DrawingController implements Serializable {
 				}
 				else if(s instanceof HexagonAdapter) {
 					DlgForHexagon dialog = new DlgForHexagon();
-					HexagonAdapter old = (HexagonAdapter) ((HexagonAdapter) s).clone();
-					dialog.update(old.getX(), old.getY(), old.getR(), old.getColor(), old.getInsideColor());
+					HexagonAdapter old = (HexagonAdapter) s;
+					HexagonAdapter newc = (HexagonAdapter) ((HexagonAdapter) s).clone();
+					dialog.update(newc.getX(), newc.getY(), newc.getR(), newc.getColor(), newc.getInsideColor());
 					dialog.setVisible(true);
 					if(dialog.getFinished() == 1) {
 						
-						Hexagon newh = new Hexagon(dialog.getX(), dialog.getY(), dialog.getRadius());
-						newh.setBorderColor(dialog.getContour());
-						newh.setAreaColor(dialog.getInside());
+						newc.getHexagon().setBorderColor(dialog.getContour());
+						newc.getHexagon().setAreaColor(dialog.getInside());
 						
-						HexagonAdapter newc = new HexagonAdapter(newh);
+						newc.getHexagon().setX(dialog.getX());
+						newc.getHexagon().setY(dialog.getY());
+						newc.getHexagon().setR(dialog.getRadius());
 						newc.setColor(dialog.getContour());
 						newc.setInsideColor(dialog.getInside());
 												
@@ -881,7 +883,44 @@ public class DrawingController implements Serializable {
 
 						}
 					}
+				} else if (array[1].equals("hexagon")) {
+					
+					Hexagon oldHex = new Hexagon(Integer.parseInt(values[0]), Integer.parseInt(values[1]), Integer.parseInt(values[2]));
+					oldHex.setBorderColor(parseColor(values[3], values[4], values[5]));
+					oldHex.setAreaColor(parseColor(values[6], values[7], values[8]));
+					
+					HexagonAdapter oldState = new HexagonAdapter(oldHex);
+					oldState.setColor(oldHex.getBorderColor());
+					oldState.setInsideColor(oldHex.getAreaColor());
+					
+					Hexagon newHex = new Hexagon(Integer.parseInt(newValues[0]), Integer.parseInt(newValues[1]), Integer.parseInt(newValues[2]));
+					newHex.setBorderColor(parseColor(newValues[3], newValues[4], newValues[5]));
+					newHex.setAreaColor(parseColor(newValues[6], newValues[7], newValues[8]));
+					
+					HexagonAdapter newState = new HexagonAdapter(newHex);
+					newState.setColor(newHex.getBorderColor());
+					newState.setInsideColor(newHex.getAreaColor());
+					
+					System.out.println(oldState.toString());
+					System.out.println(newState.toString());
+
+					Iterator<Shape> it = model.getAll().iterator();
+					while(it.hasNext()) {
+						Shape s = it.next();
+								
+						if(s instanceof HexagonAdapter)
+						{	
+							if(oldState.compareTo((HexagonAdapter) s) == 0)
+								cmdUpdateHexagon = new CmdUpdateHexagon((HexagonAdapter) s, newState);
+								executeCmd(cmdUpdateHexagon);
+								frame.addToLog(cmdUpdateHexagon.toString());
+								removeSelection();
+
+						}
+					}
 				}
+				
+			
 			} else if (array[0].equals("select")) {
 
 				String valuesLine = array[2].replaceAll("[^0-9,.]", "");
