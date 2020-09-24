@@ -554,6 +554,8 @@ public class DrawingController implements Serializable {
 	}
 	
 	public void undo() {
+		
+		removeSelection();
 
 		frame.getBtnRedo().setEnabled(true);
 		
@@ -573,6 +575,8 @@ public class DrawingController implements Serializable {
 	}
 	
 	public void redo() {
+		
+		removeSelection();
 		
 		frame.getBtnUndo().setEnabled(true);
 		
@@ -648,6 +652,7 @@ public class DrawingController implements Serializable {
 
 		//array: [add,point,(96,69,[0,0,0])]
 		//values: 96,69,0,0,0
+		removeSelection();
 		String[] array = line.split(":");
 		
 			if (array[0].equals("add")) {
@@ -767,7 +772,7 @@ public class DrawingController implements Serializable {
 								cmdUpdatePoint = new CmdUpdatePoint((Point) s, newState);
 								executeCmd(cmdUpdatePoint);
 								frame.addToLog(cmdUpdatePoint.toString());
-								s.setSelected(false);
+								removeSelection();
 						}
 					}
 				}
@@ -793,7 +798,7 @@ public class DrawingController implements Serializable {
 								cmdUpdateLine = new CmdUpdateLine((Line) s, newState);
 								executeCmd(cmdUpdateLine);
 								frame.addToLog(cmdUpdateLine.toString());
-								s.setSelected(false);
+								removeSelection();
 						}
 					}
 				}
@@ -821,7 +826,7 @@ public class DrawingController implements Serializable {
 								cmdUpdateCircle = new CmdUpdateCircle((Circle) s, newState);
 								executeCmd(cmdUpdateCircle);
 								frame.addToLog(cmdUpdateCircle.toString());
-								s.setSelected(false);
+								removeSelection();
 
 						}
 					}
@@ -850,7 +855,7 @@ public class DrawingController implements Serializable {
 								cmdUpdateSquare = new CmdUpdateSquare((Square) s, newState);
 								executeCmd(cmdUpdateSquare);
 								frame.addToLog(cmdUpdateSquare.toString());
-								s.setSelected(false);
+								removeSelection();
 
 						}
 					}
@@ -881,7 +886,7 @@ public class DrawingController implements Serializable {
 								cmdUpdateRectangle = new CmdUpdateRectangle((Rectangle) s, newState);
 								executeCmd(cmdUpdateRectangle);
 								frame.addToLog(cmdUpdateRectangle.toString());
-								s.setSelected(false);
+								removeSelection();
 
 						}
 					}
